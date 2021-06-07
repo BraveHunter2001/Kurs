@@ -18,16 +18,10 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.log4j.Logger;
 
-/**
- * Class for export pdf report
- * @author Ilya
- */
+
 public class PDFExporter extends JFrame {
     public static final Logger logger = Logger.getLogger(PDFExporter.class);
-    /**
-     * Constructor export data in pdf
-     * @param data - exported
-     */
+
     public PDFExporter(DataTable data) {
         FileDialog fileDialog = new FileDialog(this, "Export PDF", FileDialog.SAVE);
         fileDialog.setFile("*.pdf");
