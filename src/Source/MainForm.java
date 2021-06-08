@@ -30,6 +30,8 @@ public class MainForm extends JFrame{
     private JButton loadButton;
     private JButton addButton;
     private JButton removeButton;
+    private JLabel ModeLabel;
+    private JComboBox<ProgramMode> modeParamBox;
 
     //search
     private JLabel searchByLabel;
@@ -41,7 +43,7 @@ public class MainForm extends JFrame{
     private JLabel sortByLabel;
     private JComboBox<CharacterColumns> sortParamBox;
 
-    private DefaultTableModel model;
+    private DefaultTableModel charaterModel;
     private JTable charactersTable;
     private JScrollPane scroll;
 
@@ -49,6 +51,12 @@ public class MainForm extends JFrame{
     private DefaultTableModel taskModel;
     private JTable taskTable;
     private JScrollPane taskScroll;
+
+
+    //panels
+    private JPanel charactersPanel;
+    private JPanel tasksPanel;
+    private JPanel tablesPanel;
 
     CharactersTable data;
     CharactersTable viewData;
@@ -60,8 +68,9 @@ public class MainForm extends JFrame{
     {
         //init window
         super("Master Characters list");
-        setSize(1200,400);
-        setLocation(100, 100);
+        setSize(950,400);
+        setLocation(200, 200);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //top menu
@@ -107,6 +116,9 @@ public class MainForm extends JFrame{
         addButton = new JButton(new ImageIcon("./img/add.png"));
         removeButton = new JButton(new ImageIcon("./img/remove.png"));
 
+        ModeLabel = new JLabel("Program mode:");
+        modeParamBox = new JComboBox<ProgramMode>(ProgramMode.values());
+
         saveButton.setBorderPainted(false);
         loadButton.setBorderPainted(false);
         addButton.setBorderPainted(false);
@@ -121,6 +133,8 @@ public class MainForm extends JFrame{
         toolBar.add(loadButton);
         toolBar.add(addButton);
         toolBar.add(removeButton);
+        toolBar.add(ModeLabel);
+        toolBar.add(modeParamBox);
 
         toolBar.add(Box.createHorizontalStrut(5));
         toolBar.add(new JSeparator(SwingConstants.VERTICAL));
@@ -151,9 +165,13 @@ public class MainForm extends JFrame{
 
         getContentPane().add(toolBar, BorderLayout.NORTH);
 
+        tablesPanel = new JPanel();
+        charactersPanel = new JPanel();
+
+        tasksPanel = new JPanel();
 
         // init table
-        model = new DefaultTableModel(null, CharacterColumns.values())
+        charaterModel = new DefaultTableModel(null, CharacterColumns.values())
         {
             @Override
             public boolean isCellEditable(int row, int column)
@@ -162,10 +180,11 @@ public class MainForm extends JFrame{
             }
         };
 
-        charactersTable = new JTable(model);
+        charactersTable = new JTable(charaterModel);
 
         scroll = new JScrollPane(charactersTable);
-        add(scroll, BorderLayout.CENTER);
+        charactersPanel.add(scroll,BorderLayout.CENTER);
+
 
         //init task table
 
@@ -179,10 +198,19 @@ public class MainForm extends JFrame{
 
         taskTable = new JTable(taskModel);
         taskScroll = new JScrollPane(taskTable);
-        add(taskScroll, BorderLayout.EAST);
+        tasksPanel.add(taskScroll,BorderLayout.CENTER);
 
 
+        GridLayout layout = new GridLayout(1, 2, 0, 1);
+        tablesPanel.setLayout(layout);
 
+        tablesPanel.add(charactersPanel);
+        tablesPanel.add(tasksPanel);
+
+        add(tablesPanel);
+
+
+        // Listeners
         newMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -313,18 +341,18 @@ public class MainForm extends JFrame{
 
         //create tables Characters
         if (maindata == null)
-            data = new CharactersTable(model);
+            data = new CharactersTable(charaterModel);
         else
             data = maindata;
 
         // create tables Tasks
         if (taskDataMain == null)
-            taskData = new TaskTable(model);
+            taskData = new TaskTable(charaterModel);
         else
             taskData = taskDataMain;
 
         viewData = data;
-        viewData.InsertDataInTableModel(model);
+        viewData.InsertDataInTableModel(charaterModel);
 
         viewTaskData = taskData;
         viewTaskData.InsertDataInTableModel(taskModel);
@@ -338,14 +366,14 @@ public class MainForm extends JFrame{
 
     void Add()
     {
-        new CharacterForm("Add",model, data);
+        new CharacterForm("Add", charaterModel, data);
     }
 
 
     void Delete()
     {
         try {
-            data.RemoveRow(charactersTable.getSelectedRow(), model);
+            data.RemoveRow(charactersTable.getSelectedRow(), charaterModel);
         } catch ( IndexOutOfBoundsException e)
         {
             JOptionPane.showMessageDialog(null, "Select the row to delete!");
@@ -360,26 +388,26 @@ public class MainForm extends JFrame{
         if(text == null || text.equals(""))
         {
             viewData = data;
-            viewData.InsertDataInTableModel(model);
+            viewData.InsertDataInTableModel(charaterModel);
         }
         else
         {
             viewData = data.Search(searchParamBox.getSelectedIndex(), searchField.getText());
-            viewData.InsertDataInTableModel(model);
+            viewData.InsertDataInTableModel(charaterModel);
         }
         charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void Sort()
     {
-        viewData.Sort(sortParamBox.getSelectedIndex()).InsertDataInTableModel(model);
+        viewData.Sort(sortParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
         charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void NewTable()
     {
         viewData = data = new CharactersTable();
-        viewData.InsertDataInTableModel(model);
+        viewData.InsertDataInTableModel(charaterModel);
         charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
@@ -390,19 +418,19 @@ public class MainForm extends JFrame{
 
     void Load()
     {
-        new TXTImporter("Load table",this,model);
+        new TXTImporter("Load table",this, charaterModel);
         viewData = data;
         Sort();
     }
 
     void Change(int row)
     {
-        new CharacterForm("Change", model, data, row);
+        new CharacterForm("Change", charaterModel, data, row);
     }
 
     void ShowTasks(int row)
     {
-        Character ch = data.GetRowAt(row, model);
+        Character ch = data.GetRowAt(row, charaterModel);
         taskData = new TaskTable(ch.GetTasks());
         taskData.InsertDataInTableModel(taskModel);
     }
@@ -419,7 +447,7 @@ public class MainForm extends JFrame{
     public void ApplyData(CharactersTable dat)
     {
         viewData = data = dat;
-        viewData.InsertDataInTableModel(model);
+        viewData.InsertDataInTableModel(charaterModel);
     }
 
     public void SetData(CharactersTable sdata)
