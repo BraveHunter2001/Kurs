@@ -28,7 +28,7 @@ public class Character extends Line {
             throw new IllegalArgumentException("array length doesn't match column count!");
 
         if (line == null)
-            line = new Object[7];
+            line = new Object[6];
 
 
         line[CharacterColumns.ID.GetId()] = Integer.parseInt(strs[CharacterColumns.ID.GetId()]);
@@ -36,14 +36,14 @@ public class Character extends Line {
         line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
         line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[CharacterColumns.MeetingStatus.GetId()]);
-
+        line[CharacterColumns.Tasks.GetId()] = null;
     }
 
 
     public Character(int ID, String Name, String Apperance, String Location, MeetingStatus MeetingStatus, List<Task> tasks)
     {
         if (line == null)
-            line = new Object[7];
+            line = new Object[6];
         line[CharacterColumns.ID.GetId()] = ID;
         line[CharacterColumns.Name.GetId()] = Name;
         line[CharacterColumns.Apperance.GetId()] = Apperance;
@@ -93,12 +93,14 @@ public class Character extends Line {
 
     List<Task> GetTasks() {return (List<Task>)line[CharacterColumns.Tasks.GetId()];}
 
-    String getTaskString(){
+    public String getTaskString(){
         String res ="";
         List<Task> tasks = (List<Task>)line[CharacterColumns.Tasks.GetId()];
         for (int i=0; i< tasks.size(); i++)
         {
-            String temp = tasks.get(i).GetName().toString() + '|' +tasks.get(i).GetTaskStatus().toString()+ ';';
+            String temp = tasks.get(i).GetName().toString() + ',' +tasks.get(i).GetTaskStatus().toString();
+            if(i != tasks.size() - 1)
+                temp += '|';
             res += temp;
         }
 
