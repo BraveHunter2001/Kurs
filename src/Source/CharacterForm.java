@@ -194,12 +194,12 @@ public class CharacterForm extends JFrame
      */
     void Add(DefaultTableModel model, CharactersTable data)
     {
-        ChangedCharacter.line[Columns.Name.GetId()] = NameField.getText();
-        ChangedCharacter.line[Columns.Location.GetId()] = LocationField.getText();
-        ChangedCharacter.line[Columns.Apperance.GetId()] = ApperanceField.getText();
-        ChangedCharacter.line[Columns.Task.GetId()] = TaskField.getText();
-        ChangedCharacter.line[Columns.TaskStatus.GetId()] = TaskStatusParamBox.getSelectedItem();
-        ChangedCharacter.line[Columns.MeetingStatus.GetId()] = MeetingStatusParamBox.getSelectedItem();
+        ChangedCharacter.line[CharacterColumns.Name.GetId()] = NameField.getText();
+        ChangedCharacter.line[CharacterColumns.Location.GetId()] = LocationField.getText();
+        ChangedCharacter.line[CharacterColumns.Apperance.GetId()] = ApperanceField.getText();
+        ChangedCharacter.line[CharacterColumns.Task.GetId()] = TaskField.getText();
+        ChangedCharacter.line[CharacterColumns.TaskStatus.GetId()] = TaskStatusParamBox.getSelectedItem();
+        ChangedCharacter.line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatusParamBox.getSelectedItem();
 
         model.addRow(data.AddRow(ChangedCharacter.GetData()));
     }
@@ -213,12 +213,12 @@ public class CharacterForm extends JFrame
     void Change(DefaultTableModel model, CharactersTable data, int row)
     {
         Object[] lineData = new Object[model.getColumnCount() -1];
-        lineData[Columns.Name.GetId() - 1] = NameField.getText();
-        lineData[Columns.Apperance.GetId() - 1] = ApperanceField.getText();
-        lineData[Columns.Location.GetId() - 1] = LocationField.getText();
-        lineData[Columns.Task.GetId() - 1] = TaskField.getText();
-        lineData[Columns.TaskStatus.GetId() - 1] = TaskStatusParamBox.getSelectedItem();
-        lineData[Columns.MeetingStatus.GetId() - 1] = MeetingStatusParamBox.getSelectedItem();
+        lineData[CharacterColumns.Name.GetId() - 1] = NameField.getText();
+        lineData[CharacterColumns.Apperance.GetId() - 1] = ApperanceField.getText();
+        lineData[CharacterColumns.Location.GetId() - 1] = LocationField.getText();
+        lineData[CharacterColumns.Task.GetId() - 1] = TaskField.getText();
+        lineData[CharacterColumns.TaskStatus.GetId() - 1] = TaskStatusParamBox.getSelectedItem();
+        lineData[CharacterColumns.MeetingStatus.GetId() - 1] = MeetingStatusParamBox.getSelectedItem();
 
         for (int i = 1; i < model.getColumnCount() - 1; i++)
         {

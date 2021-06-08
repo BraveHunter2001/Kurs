@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFrame;
+
+import Source.CharactersTable;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -31,7 +33,7 @@ public class PDFExporter extends JFrame {
 
         if (fullnamefile != null && fullnamefile != "nullnull") {
             Document document = new Document(PageSize.A4, 5, 5, 50, 50);
-            PdfPTable pdfTable = new PdfPTable(Columns.values().length);
+            PdfPTable pdfTable = new PdfPTable(CharacterColumns.values().length);
 
             try{
                 PdfWriter.getInstance(document, new FileOutputStream(fullnamefile));
@@ -56,9 +58,9 @@ public class PDFExporter extends JFrame {
             Font font = new Font(bf, 11);
             Font fontBold = new Font(bfBold, 11);
 
-            for (int i = 0; i < Columns.values().length; i++)
+            for (int i = 0; i < CharacterColumns.values().length; i++)
             {
-                pdfTable.addCell(new PdfPCell(new Phrase(Columns.values()[i].toString(),fontBold)));
+                pdfTable.addCell(new PdfPCell(new Phrase(CharacterColumns.values()[i].toString(),fontBold)));
             }
 
             for (int i =0; i < data.Rows().size(); i++)

@@ -4,6 +4,7 @@ package Import;
 import Source.*;
 
 import Source.Character;
+import Source.CharactersTable;
 import org.apache.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;

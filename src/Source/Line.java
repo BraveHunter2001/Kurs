@@ -10,14 +10,14 @@ public abstract class Line {
     {
         if (ln == null || ln.length == 0)
             throw new IllegalArgumentException("argument was null or empty!");
-        if (ln.length != Columns.values().length)
+        if (ln.length != CharacterColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
         line = ln;
 
     }
 
 
-    int GetID()
+    public int GetID()
     {
         return Integer.parseInt(line[0].toString());
     }

@@ -33,13 +33,13 @@ public class MainForm extends JFrame{
 
     //search
     private JLabel searchByLabel;
-    private JComboBox<Columns> searchParamBox;
+    private JComboBox<CharacterColumns> searchParamBox;
     private JTextField searchField;
     private JButton searchButton;
 
     //sort
     private JLabel sortByLabel;
-    private JComboBox<Columns> sortParamBox;
+    private JComboBox<CharacterColumns> sortParamBox;
 
     private DefaultTableModel model;
     private JTable charactersTable;
@@ -121,7 +121,7 @@ public class MainForm extends JFrame{
 
         // toolbar-search
         searchByLabel = new JLabel("search by:");
-        searchParamBox = new JComboBox<Columns>(Columns.values());
+        searchParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
         searchField = new JTextField();
         searchButton = new JButton("Search");
 
@@ -137,7 +137,7 @@ public class MainForm extends JFrame{
         //toolbar-sort
 
         sortByLabel = new JLabel("sort by: ");
-        sortParamBox = new JComboBox<Columns>(Columns.values());
+        sortParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
         toolBar.add(sortByLabel);
         toolBar.add(sortParamBox);
         toolBar.setFloatable(false);
@@ -146,7 +146,7 @@ public class MainForm extends JFrame{
 
 
         // init table
-        model = new DefaultTableModel(null, Columns.values())
+        model = new DefaultTableModel(null, CharacterColumns.values())
         {
             @Override
             public boolean isCellEditable(int row, int column)

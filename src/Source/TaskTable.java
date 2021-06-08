@@ -1,17 +1,17 @@
 package Source;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+public class TaskTable extends DataTable{
+    public static Task DefaultTAsk = new Task(0, "Found 10 mashrooms", TaskStatus.Taken);
 
-public class CharactersTable {
+    List<Task> rows = new ArrayList<Task>();
 
-
-    public static Character DefaultCharacter = new Character(0, "Tel", "Human", "Village", "Save wife", TaskStatus.Taken, MeetingStatus.Met);
-
-    List<Character> rows = new ArrayList<Character>();
-
-    public CharactersTable(DefaultTableModel model)
+    public TaskTable(DefaultTableModel model)
     {
         try {
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -23,34 +23,34 @@ public class CharactersTable {
         }
     }
 
-    public CharactersTable(List<Character> lines)
+    public TaskTable(List<Task> lines)
     {
         rows = lines;
     }
 
-    public CharactersTable() { }
+    public TaskTable() { }
 
     public Object[] AddRow(Object[] values)
     {
         int newId = 0;
 
-        for (Character row : rows) {
+        for (Task row : rows) {
             int id = row.GetID();
             if (id > newId)
                 newId = id;
         }
         newId++;
-        Object[] newRow = new Object[CharacterColumns.values().length];
+        Object[] newRow = new Object[TasksColumns.values().length];
         int len = values.length;
         System.arraycopy(values, 0, newRow,0, len);
-        newRow[CharacterColumns.ID.GetId()] = newId;
-        rows.add(new Character(newRow));
+        newRow[TasksColumns.ID.GetId()] = newId;
+        rows.add(new Task(newRow));
         return newRow;
     }
 
     public void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException
     {
-        if (index >= CharacterColumns.values().length || index < 0 )
+        if (index >= TasksColumns.values().length || index < 0 )
             throw  new IndexOutOfBoundsException(index);
         model.removeRow(index);
         rows.remove(index);
@@ -67,7 +67,7 @@ public class CharactersTable {
         }
     }
 
-    Character GetRowAt(int row, DefaultTableModel model)
+    Task GetRowAt(int row, DefaultTableModel model)
     {
         Object[] result = new Object[model.getColumnCount()];
         for (int i = 0; i < model.getColumnCount(); i++)
@@ -75,16 +75,16 @@ public class CharactersTable {
             result[i] = model.getValueAt(row, i);
         }
 
-        return new Character(result);
+        return new Task(result);
     }
 
 
-    public CharactersTable Search(int columnIndex, String value) throws IndexOutOfBoundsException
+    public TaskTable Search(int columnIndex, String value) throws IndexOutOfBoundsException
     {
-        if (columnIndex >= CharacterColumns.values().length|| columnIndex < 0)
+        if (columnIndex >= TasksColumns.values().length|| columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
 
-        List<Character> res = new ArrayList<Character>();
+        List<Task> res = new ArrayList<Task>();
 
         for (int i =0; i < rows.size(); i++)
         {
@@ -94,7 +94,7 @@ public class CharactersTable {
             }
         }
 
-        return new CharactersTable(res);
+        return new TaskTable(res);
     }
 
     public void InsertDataInTableModel (DefaultTableModel model)
@@ -106,18 +106,18 @@ public class CharactersTable {
         }
 
 
-        model.setDataVector(array, CharacterColumns.values());
+        model.setDataVector(array, TasksColumns.values());
     }
 
-    public CharactersTable Sort(int columnIndex)
+    public TaskTable Sort(int columnIndex)
     {
         if(rows.size() > 0)
         {
-            List<Character> res = new ArrayList<Character>(rows);
+            List<Task> res = new ArrayList<Task>(rows);
 
-            Collections.sort(res, new Comparator<Character>() {
+            Collections.sort(res, new Comparator<Task>() {
                 @Override
-                public int compare(Character o1, Character o2) {
+                public int compare(Task o1, Task o2) {
                     Object data1 = o1.GetData()[columnIndex], data2 = o2.GetData()[columnIndex];
 
                     if (data1 == null)
@@ -136,13 +136,12 @@ public class CharactersTable {
                 }
             });
 
-            return  new CharactersTable(res);
+            return  new TaskTable(res);
         }
-        return new CharactersTable();
+        return new TaskTable();
     }
 
-    public List<Character> Rows(){
+    public List<Task> Rows(){
         return rows;
     }
-
 }

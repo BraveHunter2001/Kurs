@@ -9,7 +9,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 
-public class Character extends Line{
+public class Character extends Line {
 
 
     public Character() { super(); }
@@ -23,20 +23,20 @@ public class Character extends Line{
     {
         if (strs == null || strs.length == 0)
             throw new IllegalArgumentException("argument was null or empty!");
-        if (strs.length != Columns.values().length)
+        if (strs.length != CharacterColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
 
         if (line == null)
             line = new Object[7];
 
 
-        line[Columns.ID.GetId()] = Integer.parseInt(strs[Columns.ID.GetId()]);
-        line[Columns.Name.GetId()] = strs[Columns.Name.GetId()];
-        line[Columns.Apperance.GetId()] = strs[Columns.Apperance.GetId()];
-        line[Columns.Location.GetId()] = strs[Columns.Location.GetId()];
-        line[Columns.Task.GetId()] = strs[Columns.Task.GetId()];
-        line[Columns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(strs[Columns.TaskStatus.GetId()]);
-        line[Columns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[Columns.MeetingStatus.GetId()]);
+        line[CharacterColumns.ID.GetId()] = Integer.parseInt(strs[CharacterColumns.ID.GetId()]);
+        line[CharacterColumns.Name.GetId()] = strs[CharacterColumns.Name.GetId()];
+        line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
+        line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
+        line[CharacterColumns.Task.GetId()] = strs[CharacterColumns.Task.GetId()];
+        line[CharacterColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(strs[CharacterColumns.TaskStatus.GetId()]);
+        line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[CharacterColumns.MeetingStatus.GetId()]);
     }
 
 
@@ -44,33 +44,33 @@ public class Character extends Line{
     {
         if (line == null)
             line = new Object[7];
-        line[Columns.ID.GetId()] = ID;
-        line[Columns.Name.GetId()] = Name;
-        line[Columns.Apperance.GetId()] = Apperance;
-        line[Columns.Location.GetId()] = Location;
-        line[Columns.Task.GetId()] = Task;
-        line[Columns.TaskStatus.GetId()] = TaskStatus;
-        line[Columns.MeetingStatus.GetId()] = MeetingStatus;
+        line[CharacterColumns.ID.GetId()] = ID;
+        line[CharacterColumns.Name.GetId()] = Name;
+        line[CharacterColumns.Apperance.GetId()] = Apperance;
+        line[CharacterColumns.Location.GetId()] = Location;
+        line[CharacterColumns.Task.GetId()] = Task;
+        line[CharacterColumns.TaskStatus.GetId()] = TaskStatus;
+        line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus;
     }
 
     public Character(Node nod)
     {
-        Object[] value = new Object[Columns.values().length];
+        Object[] value = new Object[CharacterColumns.values().length];
         NamedNodeMap attrs = nod.getAttributes();
 
-        for (int i = 0; i < Columns.values().length - 2; i++)
+        for (int i = 0; i < CharacterColumns.values().length - 2; i++)
         {
-            value[i] = attrs.getNamedItem(Columns.values()[i].toString()).getNodeValue();
+            value[i] = attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue();
         }
 
-        value[Columns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(attrs.getNamedItem(Columns.values()[Columns.TaskStatus.GetId()].toString()).getNodeValue());
-        value[Columns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(attrs.getNamedItem(Columns.values()[Columns.MeetingStatus.GetId()].toString()).getNodeValue());
+        value[CharacterColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.TaskStatus.GetId()].toString()).getNodeValue());
+        value[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue());
         line = value;
     }
 
     void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException
     {
-        if (columnIndex >= Columns.values().length || columnIndex < 0)
+        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
 
 
@@ -80,38 +80,38 @@ public class Character extends Line{
 
     String GetName()
     {
-        return line[Columns.Name.GetId()].toString();
+        return line[CharacterColumns.Name.GetId()].toString();
     }
 
     String GetApperance()
     {
-        return line[Columns.Apperance.GetId()].toString();
+        return line[CharacterColumns.Apperance.GetId()].toString();
     }
 
     String GetLocation()
     {
-        return line[Columns.Location.GetId()].toString();
+        return line[CharacterColumns.Location.GetId()].toString();
     }
 
     String GetTask()
     {
-        return  line[Columns.Task.GetId()].toString();
+        return  line[CharacterColumns.Task.GetId()].toString();
     }
 
     TaskStatus GetTaskStatus()
     {
-        return (TaskStatus) line[Columns.TaskStatus.GetId()];
+        return (TaskStatus) line[CharacterColumns.TaskStatus.GetId()];
     }
 
     MeetingStatus GetMeetingStatus()
     {
-        return (MeetingStatus) line[Columns.MeetingStatus.GetId()];
+        return (MeetingStatus) line[CharacterColumns.MeetingStatus.GetId()];
     }
 
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
     {
 
-        if (columnIndex >= Columns.values().length || columnIndex < 0)
+        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
 
 
@@ -130,10 +130,10 @@ public class Character extends Line{
     {
         Element rec = doc.createElement("record");
         nod.appendChild(rec);
-        for (int i =0; i < Columns.values().length; i++)
+        for (int i = 0; i < CharacterColumns.values().length; i++)
         {
             String dat = (line[i]==null?"": line[i].toString());
-            rec.setAttribute(Columns.values()[i].toString(),dat);
+            rec.setAttribute(CharacterColumns.values()[i].toString(),dat);
         }
         return nod;
     }

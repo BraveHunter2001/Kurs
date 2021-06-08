@@ -1,6 +1,8 @@
 package Export;
 
 import Source.*;
+import Source.CharactersTable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileWriter;
@@ -37,9 +39,9 @@ public class HTMLExporter extends JFrame {
             pw.println("<style type=\"text/css\">table { width: 70%; border: 4px solid black;border-collapse: collapse;text-align: center;margin: auto;}th { background: #ccc;padding: 5px;border: 1px solid black; }td { padding: 5px; border: 1px solid black;}</style></head>");
             pw.println("<body><table>");
             pw.println("<tr>");
-            for (int i = 0; i < Columns.values().length; i++)
+            for (int i = 0; i < CharacterColumns.values().length; i++)
             {
-                pw.println("<th>"+ Columns.values()[i].toString()+"</th>");
+                pw.println("<th>"+ CharacterColumns.values()[i].toString()+"</th>");
             }
             pw.println("</tr>");
 

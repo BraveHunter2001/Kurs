@@ -2,8 +2,6 @@ package Source;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class DataTable {
@@ -12,7 +10,10 @@ public abstract class DataTable {
 
     public DataTable() { }
 
-    public DataTable(DefaultTableModel model) { }
+    public DataTable(DefaultTableModel model)
+    {
+
+    }
 
     public DataTable(List<Line> lines)
     {
@@ -44,10 +45,8 @@ public abstract class DataTable {
         }
 
 
-        model.setDataVector(array, Columns.values());
+        model.setDataVector(array, CharacterColumns.values());
     }
 
-    public List<Line> Rows(){
-        return rows;
-    }
+
 }

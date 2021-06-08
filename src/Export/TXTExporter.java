@@ -1,6 +1,7 @@
 package Export;
 
 import Source.*;
+import Source.CharactersTable;
 
 import java.awt.FileDialog;
 import java.io.BufferedWriter;
@@ -35,7 +36,7 @@ public class TXTExporter extends  JFrame
                     {
                         writer.write(line[j].toString());
 
-                        if(j != Columns.values().length - 1)
+                        if(j != CharacterColumns.values().length - 1)
                             writer.write("|");
                     }
                     writer.write("\r\n");

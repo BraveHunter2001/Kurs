@@ -2,10 +2,11 @@ package Export;
 
 
 //import org.w3c.dom.Attr;
+import Source.CharactersTable;
 import org.w3c.dom.Document;
 //import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import Source.*;
+
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
