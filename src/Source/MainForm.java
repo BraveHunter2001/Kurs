@@ -273,7 +273,7 @@ public class MainForm extends JFrame{
                 JTable table = (JTable) e.getSource();
                 Point point = e.getPoint();
                 int row = table.rowAtPoint(point);
-                if (e.getClickCount() == 2 && table.getSelectedRow() != -1)
+                if (e.getClickCount() == 2 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Characters)
                 {
                     Change(row);
                 }
@@ -287,7 +287,7 @@ public class MainForm extends JFrame{
                 JTable table = (JTable) e.getSource();
                 Point point = e.getPoint();
                 int row = table.rowAtPoint(point);
-                if (e.getClickCount() == 1 && table.getSelectedRow() != -1)
+                if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Characters)
                 {
                     ShowTasks(row);
                 }
@@ -385,8 +385,11 @@ public class MainForm extends JFrame{
 
             tablesPanel.add(tasksPanel);
             tablesPanel.add(charactersPanel);
+
+            taskData.InsertDataInTableModel(taskModel);
+
+            currentModel = taskModel;
             setVisible(true);
-            currentModel = charaterModel;
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
         {
@@ -396,8 +399,9 @@ public class MainForm extends JFrame{
 
             tablesPanel.add(charactersPanel);
             tablesPanel.add(tasksPanel);
+            data.InsertDataInTableModel(charaterModel);
             setVisible(true);
-            currentModel = taskModel;
+            currentModel = charaterModel;
         } else if (modeParamBox.getSelectedItem() == ProgramMode.Both)
         {
             setVisible(false);
@@ -406,6 +410,9 @@ public class MainForm extends JFrame{
 
             tablesPanel.add(charactersPanel);
             tablesPanel.add(tasksPanel);
+
+            data.InsertDataInTableModel(charaterModel);
+            taskData.InsertDataInTableModel(taskModel);
             currentModel = null;
             setVisible(true);
         }
@@ -479,8 +486,8 @@ public class MainForm extends JFrame{
     void ShowTasks(int row)
     {
         Character ch = data.GetRowAt(row, charaterModel);
-        taskData = new TaskTable(ch.GetTasks());
-        taskData.InsertDataInTableModel(taskModel);
+        viewTaskData = new TaskTable(ch.GetTasks());
+        viewTaskData.InsertDataInTableModel(taskModel);
     }
 
     void ExportXML()

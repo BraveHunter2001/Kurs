@@ -98,6 +98,11 @@ public class TaskTable extends DataTable{
 
     public void InsertDataInTableModel (DefaultTableModel model)
     {
+        if (rows == null)
+        {
+            model.setDataVector(null, TasksColumns.values());
+            return;
+        }
         Object[][] array = new Object[rows.size()][];
         for(int i =0; i< rows.size(); i++)
         {
