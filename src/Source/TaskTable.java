@@ -1,13 +1,11 @@
 package Source;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class TaskTable extends DataTable{
-    public static Task DefaultTAsk = new Task(0, "Found 10 mashrooms", TaskStatus.Taken);
+    public static Task DefaultTask = new Task(0, "Found 10 mashrooms", TaskStatus.Taken);
+    public static List<Task> DefaultTasks = Arrays.asList(new Task[]{DefaultTask});
 
     List<Task> rows = new ArrayList<Task>();
 

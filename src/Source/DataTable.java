@@ -44,7 +44,6 @@ public abstract class DataTable {
             array[i] = rows.get(i).GetData();
         }
 
-
         model.setDataVector(array, CharacterColumns.values());
     }
 

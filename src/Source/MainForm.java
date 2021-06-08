@@ -45,15 +45,22 @@ public class MainForm extends JFrame{
     private JTable charactersTable;
     private JScrollPane scroll;
 
+    //tasks
+    private DefaultTableModel taskModel;
+    private JTable taskTable;
+    private JScrollPane taskScroll;
+
     CharactersTable data;
     CharactersTable viewData;
+
+    TaskTable taskData;
 
 
     public MainForm(CharactersTable maindata)
     {
         //init window
         super("Master Characters list");
-        setSize(900,400);
+        setSize(1200,400);
         setLocation(100, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -154,14 +161,32 @@ public class MainForm extends JFrame{
                 return  false;
             }
         };
+
         charactersTable = new JTable(model);
+
         scroll = new JScrollPane(charactersTable);
         add(scroll, BorderLayout.CENTER);
+
+        //init task table
+
+        taskModel = new DefaultTableModel(null, TasksColumns.values()){
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return  false;
+            }
+        };
+
+        taskTable = new JTable(taskModel);
+        taskScroll = new JScrollPane(taskTable);
+        add(taskScroll, BorderLayout.EAST);
+
+
 
         newMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Test");
+                JOptionPane.showMessageDialog(null, "New Table created");
                 NewTable();
             }
 
@@ -213,6 +238,20 @@ public class MainForm extends JFrame{
                 if (e.getClickCount() == 2 && table.getSelectedRow() != -1)
                 {
                     Change(row);
+                }
+            }
+        });
+
+        //show tasks
+        charactersTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JTable table = (JTable) e.getSource();
+                Point point = e.getPoint();
+                int row = table.rowAtPoint(point);
+                if (e.getClickCount() == 1 && table.getSelectedRow() != -1)
+                {
+                    ShowTasks(row);
                 }
             }
         });
@@ -279,6 +318,7 @@ public class MainForm extends JFrame{
 
         viewData = data;
         viewData.InsertDataInTableModel(model);
+        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
         setVisible(true);
     }
 
@@ -341,6 +381,13 @@ public class MainForm extends JFrame{
     void Change(int row)
     {
         new CharacterForm("Change", model, data, row);
+    }
+
+    void ShowTasks(int row)
+    {
+        Character ch = data.GetRowAt(row, model);
+        taskData = new TaskTable(ch.GetTasks());
+        taskData.InsertDataInTableModel(taskModel);
     }
 
     void ExportXML()

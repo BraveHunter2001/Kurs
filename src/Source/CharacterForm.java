@@ -3,6 +3,8 @@ package Source;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,7 +19,6 @@ public class CharacterForm extends JFrame
     private JLabel ApperanceLabel;
     private JLabel LocationLabel;
     private JLabel TaskLabel;
-    private JLabel TaskStatusLabel;
     private JLabel MeetingStatusLabel;
 
     private JTextField NameField;
@@ -25,7 +26,6 @@ public class CharacterForm extends JFrame
     private JTextField LocationField;
     private JTextField TaskField;
 
-    private JComboBox<TaskStatus> TaskStatusParamBox;
     private JComboBox<MeetingStatus> MeetingStatusParamBox;
 
     private JButton ButtonOk;
@@ -58,21 +58,17 @@ public class CharacterForm extends JFrame
         LocationField = new JTextField();
         LocationField.setText(ChangedCharacter.GetLocation());
 
-        TaskLabel = new JLabel("Task:");
+        TaskLabel = new JLabel("Tasks");
         TaskField = new JTextField();
-        TaskField.setText(ChangedCharacter.GetTask());
+        TaskField.setText(ChangedCharacter.getTaskString());
 
-        TaskStatusLabel = new JLabel("TaskStatus:");
-        TaskStatusParamBox = new JComboBox<TaskStatus>(TaskStatus.values());
-        TaskStatusParamBox.setSelectedItem((TaskStatus)ChangedCharacter.GetTaskStatus());
-
-        MeetingStatusLabel = new JLabel("TaskStatus:");
+        MeetingStatusLabel = new JLabel("MeetingStatus:");
         MeetingStatusParamBox = new JComboBox<MeetingStatus>(MeetingStatus.values());
         MeetingStatusParamBox.setSelectedItem((MeetingStatus)ChangedCharacter.GetMeetingStatus());
         ButtonOk = new JButton("Ok");
 
         Container panel = this.getContentPane();
-        panel.setLayout(new GridLayout(4, 2, 5, 5));
+        panel.setLayout(new GridLayout(6, 1, 5, 10));
 
         panel.add(NameLabel);
         panel.add(NameField);
@@ -83,18 +79,27 @@ public class CharacterForm extends JFrame
         panel.add(LocationLabel);
         panel.add(LocationField);
 
+        panel.add(MeetingStatusLabel);
+        panel.add(MeetingStatusParamBox);
+
         panel.add(TaskLabel);
         panel.add(TaskField);
 
-        panel.add(TaskStatusLabel);
-        panel.add(TaskStatusParamBox);
-
-        panel.add(MeetingStatusLabel);
-        panel.add(MeetingStatusParamBox);
 
         panel.add(ButtonOk);
 
         setContentPane(panel);
+
+        TaskField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                if (e.getClickCount() == 2)
+                {
+                    JOptionPane.showMessageDialog(null, "Test");
+                }
+            }
+        });
 
         ButtonOk.addActionListener(new ActionListener() {
             @Override
@@ -137,13 +142,13 @@ public class CharacterForm extends JFrame
         LocationField = new JTextField();
         LocationField.setText(ChangedCharacter.GetLocation());
 
-        TaskLabel = new JLabel("Task:");
-        TaskField = new JTextField();
-        TaskField.setText(ChangedCharacter.GetTask());
+       // TaskLabel = new JLabel("Task:");
+        //TaskField = new JTextField();
+        //TaskField.setText(ChangedCharacter.GetTask());
 
-        TaskStatusLabel = new JLabel("TaskStatus:");
-        TaskStatusParamBox = new JComboBox<TaskStatus>(TaskStatus.values());
-        TaskStatusParamBox.setSelectedItem((TaskStatus)ChangedCharacter.GetTaskStatus());
+        //TaskStatusLabel = new JLabel("TaskStatus:");
+       // TaskStatusParamBox = new JComboBox<TaskStatus>(TaskStatus.values());
+       // TaskStatusParamBox.setSelectedItem((TaskStatus)ChangedCharacter.GetTaskStatus());
 
         MeetingStatusLabel = new JLabel("TaskStatus:");
         MeetingStatusParamBox = new JComboBox<MeetingStatus>(MeetingStatus.values());
@@ -151,7 +156,7 @@ public class CharacterForm extends JFrame
         ButtonOk = new JButton("Ok");
 
         Container panel = this.getContentPane();
-        panel.setLayout(new GridLayout(4, 2, 5, 5));
+        panel.setLayout(new GridLayout(5, 2, 5, 5));
 
         panel.add(NameLabel);
         panel.add(NameField);
@@ -165,8 +170,8 @@ public class CharacterForm extends JFrame
         panel.add(TaskLabel);
         panel.add(TaskField);
 
-        panel.add(TaskStatusLabel);
-        panel.add(TaskStatusParamBox);
+       // panel.add(TaskStatusLabel);
+       // panel.add(TaskStatusParamBox);
 
         panel.add(MeetingStatusLabel);
         panel.add(MeetingStatusParamBox);
@@ -197,8 +202,8 @@ public class CharacterForm extends JFrame
         ChangedCharacter.line[CharacterColumns.Name.GetId()] = NameField.getText();
         ChangedCharacter.line[CharacterColumns.Location.GetId()] = LocationField.getText();
         ChangedCharacter.line[CharacterColumns.Apperance.GetId()] = ApperanceField.getText();
-        ChangedCharacter.line[CharacterColumns.Task.GetId()] = TaskField.getText();
-        ChangedCharacter.line[CharacterColumns.TaskStatus.GetId()] = TaskStatusParamBox.getSelectedItem();
+        //ChangedCharacter.line[CharacterColumns.Task.GetId()] = TaskField.getText();
+       // ChangedCharacter.line[CharacterColumns.TaskStatus.GetId()] = TaskStatusParamBox.getSelectedItem();
         ChangedCharacter.line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatusParamBox.getSelectedItem();
 
         model.addRow(data.AddRow(ChangedCharacter.GetData()));
@@ -216,8 +221,8 @@ public class CharacterForm extends JFrame
         lineData[CharacterColumns.Name.GetId() - 1] = NameField.getText();
         lineData[CharacterColumns.Apperance.GetId() - 1] = ApperanceField.getText();
         lineData[CharacterColumns.Location.GetId() - 1] = LocationField.getText();
-        lineData[CharacterColumns.Task.GetId() - 1] = TaskField.getText();
-        lineData[CharacterColumns.TaskStatus.GetId() - 1] = TaskStatusParamBox.getSelectedItem();
+        //lineData[CharacterColumns.Task.GetId() - 1] = TaskField.getText();
+        //lineData[CharacterColumns.TaskStatus.GetId() - 1] = TaskStatusParamBox.getSelectedItem();
         lineData[CharacterColumns.MeetingStatus.GetId() - 1] = MeetingStatusParamBox.getSelectedItem();
 
         for (int i = 1; i < model.getColumnCount() - 1; i++)

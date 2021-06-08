@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 
 public class Task extends Line{
 
+
     public Task() { super(); }
 
     public Task(Object[] ln) throws IllegalArgumentException

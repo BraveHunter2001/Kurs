@@ -5,9 +5,8 @@ public enum CharacterColumns {
     Name(1),
     Apperance(2),
     Location(3),
-    Task(4),
-    TaskStatus(5),
-    MeetingStatus(6);
+    MeetingStatus(4),
+    Tasks(5);
 
     private int id;
 

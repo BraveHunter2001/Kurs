@@ -8,9 +8,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.util.List;
+
 
 public class Character extends Line {
-
 
     public Character() { super(); }
 
@@ -34,13 +35,12 @@ public class Character extends Line {
         line[CharacterColumns.Name.GetId()] = strs[CharacterColumns.Name.GetId()];
         line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
         line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
-        line[CharacterColumns.Task.GetId()] = strs[CharacterColumns.Task.GetId()];
-        line[CharacterColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(strs[CharacterColumns.TaskStatus.GetId()]);
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[CharacterColumns.MeetingStatus.GetId()]);
+
     }
 
 
-    public Character(int ID, String Name, String Apperance, String Location, String Task, TaskStatus TaskStatus, MeetingStatus MeetingStatus)
+    public Character(int ID, String Name, String Apperance, String Location, MeetingStatus MeetingStatus, List<Task> tasks)
     {
         if (line == null)
             line = new Object[7];
@@ -48,9 +48,9 @@ public class Character extends Line {
         line[CharacterColumns.Name.GetId()] = Name;
         line[CharacterColumns.Apperance.GetId()] = Apperance;
         line[CharacterColumns.Location.GetId()] = Location;
-        line[CharacterColumns.Task.GetId()] = Task;
-        line[CharacterColumns.TaskStatus.GetId()] = TaskStatus;
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus;
+        line[CharacterColumns.Tasks.GetId()] = tasks;
+
     }
 
     public Character(Node nod)
@@ -62,8 +62,6 @@ public class Character extends Line {
         {
             value[i] = attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue();
         }
-
-        value[CharacterColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.TaskStatus.GetId()].toString()).getNodeValue());
         value[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue());
         line = value;
     }
@@ -93,15 +91,20 @@ public class Character extends Line {
         return line[CharacterColumns.Location.GetId()].toString();
     }
 
-    String GetTask()
-    {
-        return  line[CharacterColumns.Task.GetId()].toString();
-    }
+    List<Task> GetTasks() {return (List<Task>)line[CharacterColumns.Tasks.GetId()];}
 
-    TaskStatus GetTaskStatus()
-    {
-        return (TaskStatus) line[CharacterColumns.TaskStatus.GetId()];
+    String getTaskString(){
+        String res ="";
+        List<Task> tasks = (List<Task>)line[CharacterColumns.Tasks.GetId()];
+        for (int i=0; i< tasks.size(); i++)
+        {
+            String temp = tasks.get(i).GetName().toString() + '|' +tasks.get(i).GetTaskStatus().toString()+ ';';
+            res += temp;
+        }
+
+        return res;
     }
+    public void SetTasks(List<Task> tasks) {line[CharacterColumns.Tasks.GetId()] = tasks;}
 
     MeetingStatus GetMeetingStatus()
     {

@@ -10,7 +10,17 @@ public class Main {
 
     public static void main(String[] args) {
         logger.info("Start program");
-        new MainForm(null);
+
+        Task t2 = new Task(0,"stop", TaskStatus.Taken);
+        List<Task> ts = new ArrayList<>();
+        ts.add(t2);
+        ts.add(new Task(7,"Peraliz", TaskStatus.Failed));
+
+        List<Character> chs = new ArrayList<>();
+        chs.add(CharactersTable.DefaultCharacter);
+        chs.add(new Character(1, "Ilya", "Human", "Vil",MeetingStatus.Unmet, ts));
+        CharactersTable chsTable = new CharactersTable(chs);
+        new MainForm(chsTable);
         logger.info("Finish program");
     }
 }
