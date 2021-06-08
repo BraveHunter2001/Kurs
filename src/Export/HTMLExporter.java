@@ -16,7 +16,7 @@ public class HTMLExporter extends JFrame {
      * Constructor create html report from data
      * @param data - reported
      */
-    public HTMLExporter(DataTable data)
+    public HTMLExporter(CharactersTable data)
     {
         FileDialog fd = new FileDialog(this, "Export HTML", FileDialog.SAVE);
         fd.setFile("*.html");

@@ -16,7 +16,7 @@ import javax.swing.JFrame;
  */
 public class TXTExporter extends  JFrame
 {
-    public TXTExporter(String str, DataTable data)
+    public TXTExporter(String str, CharactersTable data)
     {
         FileDialog fileDialog = new FileDialog(this, str, FileDialog.SAVE);
         fileDialog.setFile("*.txt");

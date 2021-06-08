@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class PDFExporter extends JFrame {
     public static final Logger logger = Logger.getLogger(PDFExporter.class);
 
-    public PDFExporter(DataTable data) {
+    public PDFExporter(CharactersTable data) {
         FileDialog fileDialog = new FileDialog(this, "Export PDF", FileDialog.SAVE);
         fileDialog.setFile("*.pdf");
         fileDialog.setVisible(true);

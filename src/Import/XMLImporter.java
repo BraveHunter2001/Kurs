@@ -26,7 +26,7 @@ import java.util.List;
  * @author  Ilya
  */
 public class XMLImporter extends  JFrame{
-    private DataTable readableData;
+    private CharactersTable readableData;
     public static final Logger logger = Logger.getLogger(XMLImporter.class);
     /**
      * Constructor load all needed data
@@ -61,7 +61,7 @@ public class XMLImporter extends  JFrame{
         {
             dataList.add( new Character(Records.item(i)));
         }
-        form.ApplyData(new DataTable(dataList));
+        form.ApplyData(new CharactersTable(dataList));
     }
 
     /**
@@ -108,14 +108,14 @@ public class XMLImporter extends  JFrame{
             dataList.add( new Character(Records.item(i)));
         }
         logger.debug("File imported successfully");
-        readableData = new DataTable(dataList);
+        readableData = new CharactersTable(dataList);
     }
 
     /**
      * Function for get DataTable for lab 8
      * @return - Data
      */
-    public DataTable ReadData()
+    public CharactersTable ReadData()
     {
         return readableData;
     }

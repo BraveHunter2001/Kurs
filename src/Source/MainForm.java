@@ -7,10 +7,7 @@ import Export.*;
 import Import.*;
 import Export.TXTExporter;
 import Import.TXTImporter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -48,11 +45,11 @@ public class MainForm extends JFrame{
     private JTable charactersTable;
     private JScrollPane scroll;
 
-    DataTable data;
-    DataTable viewData;
+    CharactersTable data;
+    CharactersTable viewData;
 
 
-    public MainForm(DataTable maindata)
+    public MainForm(CharactersTable maindata)
     {
         //init window
         super("Master Characters list");
@@ -276,7 +273,7 @@ public class MainForm extends JFrame{
         });
 
         if (maindata == null)
-            data = new DataTable(model);
+            data = new CharactersTable(model);
         else
             data = maindata;
 
@@ -325,7 +322,7 @@ public class MainForm extends JFrame{
 
     void NewTable()
     {
-        viewData = data = new DataTable();
+        viewData = data = new CharactersTable();
         viewData.InsertDataInTableModel(model);
     }
 
@@ -355,17 +352,17 @@ public class MainForm extends JFrame{
         }
     }
 
-    public void ApplyData(DataTable dat)
+    public void ApplyData(CharactersTable dat)
     {
         viewData = data = dat;
         viewData.InsertDataInTableModel(model);
     }
 
-    public void SetData(DataTable sdata)
+    public void SetData(CharactersTable sdata)
     {
         data = sdata;
     }
-    public DataTable GetData()
+    public CharactersTable GetData()
     {
         return data;
     }

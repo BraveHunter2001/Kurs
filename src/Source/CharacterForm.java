@@ -3,7 +3,6 @@ package Source;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -38,14 +37,14 @@ public class CharacterForm extends JFrame
      * @param model
      * @param data
      */
-    public CharacterForm(String title, DefaultTableModel model, DataTable data)
+    public CharacterForm(String title, DefaultTableModel model, CharactersTable data)
     {
         //init
         super(title);
         setSize(500, 200);
         setLocation(500, 250);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        ChangedCharacter = DataTable.DefaultCharacter;
+        ChangedCharacter = CharactersTable.DefaultCharacter;
         //Name
         NameLabel = new JLabel("Name:");
         NameField = new JTextField();
@@ -116,7 +115,7 @@ public class CharacterForm extends JFrame
      * @param data
      * @param row
      */
-    public CharacterForm(String title, DefaultTableModel model, DataTable data, int row)
+    public CharacterForm(String title, DefaultTableModel model, CharactersTable data, int row)
     {
         //init
         super(title);
@@ -193,7 +192,7 @@ public class CharacterForm extends JFrame
      * @param model
      * @param data
      */
-    void Add(DefaultTableModel model, DataTable data)
+    void Add(DefaultTableModel model, CharactersTable data)
     {
         ChangedCharacter.line[Columns.Name.GetId()] = NameField.getText();
         ChangedCharacter.line[Columns.Location.GetId()] = LocationField.getText();
@@ -211,7 +210,7 @@ public class CharacterForm extends JFrame
      * @param data
      * @param row
      */
-    void Change(DefaultTableModel model, DataTable data, int row)
+    void Change(DefaultTableModel model, CharactersTable data, int row)
     {
         Object[] lineData = new Object[model.getColumnCount() -1];
         lineData[Columns.Name.GetId() - 1] = NameField.getText();

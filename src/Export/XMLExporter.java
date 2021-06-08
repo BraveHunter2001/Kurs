@@ -27,7 +27,7 @@ public class XMLExporter extends JFrame
      * @param data
      * @throws ParserConfigurationException
      */
-    public XMLExporter(DataTable data) throws ParserConfigurationException
+    public XMLExporter(CharactersTable data) throws ParserConfigurationException
     {
         FileDialog fileDialog = new FileDialog(this, "Export XML", FileDialog.SAVE);
         fileDialog.setFile("*.xml");
