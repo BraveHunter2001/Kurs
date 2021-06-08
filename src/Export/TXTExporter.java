@@ -37,7 +37,7 @@ public class TXTExporter extends  JFrame
                         writer.write(line[j].toString());
                         writer.write("|");
                     }
-                    writer.write( data.Rows().get(i).getTaskString());
+                    writer.write(data.Rows().get(i).getTaskString());
 
                     writer.write("\r\n");
                 }

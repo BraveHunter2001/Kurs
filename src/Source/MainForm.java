@@ -54,9 +54,9 @@ public class MainForm extends JFrame{
     CharactersTable viewData;
 
     TaskTable taskData;
+    TaskTable viewTaskData;
 
-
-    public MainForm(CharactersTable maindata)
+    public MainForm(CharactersTable maindata, TaskTable taskDataMain)
     {
         //init window
         super("Master Characters list");
@@ -311,14 +311,27 @@ public class MainForm extends JFrame{
             }
         });
 
+        //create tables Characters
         if (maindata == null)
             data = new CharactersTable(model);
         else
             data = maindata;
 
+        // create tables Tasks
+        if (taskDataMain == null)
+            taskData = new TaskTable(model);
+        else
+            taskData = taskDataMain;
+
         viewData = data;
         viewData.InsertDataInTableModel(model);
+
+        viewTaskData = taskData;
+        viewTaskData.InsertDataInTableModel(taskModel);
+
         charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+        taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+
         setVisible(true);
     }
 
@@ -337,6 +350,7 @@ public class MainForm extends JFrame{
         {
             JOptionPane.showMessageDialog(null, "Select the row to delete!");
         }
+        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void Search()
@@ -353,17 +367,20 @@ public class MainForm extends JFrame{
             viewData = data.Search(searchParamBox.getSelectedIndex(), searchField.getText());
             viewData.InsertDataInTableModel(model);
         }
+        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void Sort()
     {
         viewData.Sort(sortParamBox.getSelectedIndex()).InsertDataInTableModel(model);
+        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void NewTable()
     {
         viewData = data = new CharactersTable();
         viewData.InsertDataInTableModel(model);
+        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
     }
 
     void Save()

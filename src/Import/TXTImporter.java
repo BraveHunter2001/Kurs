@@ -40,7 +40,7 @@ public class TXTImporter extends JFrame{
             while ((line = reader.readLine())!= null)
             {
                 String[] splitted = line.split(separator);
-                if (splitted.length == CharacterColumns.values().length - 1)
+                if (splitted.length == CharacterColumns.values().length)
                     charcters.add(new Character(splitted));
             }
             form.SetData(new CharactersTable(charcters));

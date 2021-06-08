@@ -11,16 +11,18 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start program");
 
-        Task t2 = new Task(0,"stop", TaskStatus.Taken);
+        Task t2 = new Task(1,"stop", TaskStatus.Taken);
         List<Task> ts = new ArrayList<>();
         ts.add(t2);
-        ts.add(new Task(7,"Peraliz", TaskStatus.Failed));
+        ts.add(new Task(2,"Peraliz", TaskStatus.Failed));
+        TaskTable taskTable = new TaskTable(ts);
 
         List<Character> chs = new ArrayList<>();
         chs.add(CharactersTable.DefaultCharacter);
-        chs.add(new Character(1, "Ilya", "Human", "Vil",MeetingStatus.Unmet, ts));
+        chs.add(new Character(1, "Ilya", "Human", "Vil",MeetingStatus.Unmet));
+
         CharactersTable chsTable = new CharactersTable(chs);
-        new MainForm(chsTable);
+        new MainForm(chsTable, taskTable);
         logger.info("Finish program");
     }
 }

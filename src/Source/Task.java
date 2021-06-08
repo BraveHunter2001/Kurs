@@ -18,6 +18,16 @@ public class Task extends Line{
         super(ln);
     }
 
+    public Task(int ID, String Name, TaskStatus TaskStatus)
+    {
+        if (line == null)
+            line = new Object[3];
+        line[TasksColumns.ID.GetId()] = ID;
+        line[TasksColumns.Name.GetId()] = Name;
+        line[TasksColumns.TaskStatus.GetId()] = TaskStatus;
+
+    }
+
     public Task(String[] strs) throws IllegalArgumentException
     {
         if (strs == null || strs.length == 0)
@@ -34,16 +44,6 @@ public class Task extends Line{
 
     }
 
-
-    public Task(int ID, String Name, TaskStatus TaskStatus)
-    {
-        if (line == null)
-            line = new Object[3];
-        line[TasksColumns.ID.GetId()] = ID;
-        line[TasksColumns.Name.GetId()] = Name;
-        line[TasksColumns.TaskStatus.GetId()] = TaskStatus;
-
-    }
 
     public Task(Node nod)
     {
@@ -63,11 +63,13 @@ public class Task extends Line{
     {
         if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
-
-
         line[columnIndex] = value;
     }
 
+    public int GetID()
+    {
+        return Integer.parseInt(line[0].toString());
+    }
 
     String GetName()
     {
@@ -79,7 +81,10 @@ public class Task extends Line{
         return (TaskStatus) line[TasksColumns.TaskStatus.GetId()];
     }
 
-
+    int[] GetIdCharaters()
+    {
+        return (int[])line[TasksColumns.Characters.GetId()];
+    }
 
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
     {
@@ -101,7 +106,7 @@ public class Task extends Line{
 
     public Node ApplyDataToXML(Node nod, Document doc)
     {
-        Element rec = doc.createElement("record");
+        Element rec = doc.createElement("Task");
         nod.appendChild(rec);
         for (int i = 0; i < TasksColumns.values().length; i++)
         {

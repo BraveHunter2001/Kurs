@@ -7,7 +7,7 @@ import java.util.*;
 public class CharactersTable {
 
 
-    public static Character DefaultCharacter = new Character(0, "Tel", "Human", "Village", MeetingStatus.Met,TaskTable.DefaultTasks);
+    public static Character DefaultCharacter = new Character(0, "Tel", "Human", "Village", MeetingStatus.Met);
     List<Character> rows = new ArrayList<Character>();
 
     public CharactersTable(DefaultTableModel model)

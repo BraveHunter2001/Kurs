@@ -46,7 +46,8 @@ public class XMLExporter extends JFrame
                 e.printStackTrace();
                 throw e;
             }
-            Node recList = document.createElement("recordList");
+
+            Node recList = document.createElement("CharacterList");
             document.appendChild(recList);
             for (int i = 0; i < data.Rows().size(); i++)
             {
