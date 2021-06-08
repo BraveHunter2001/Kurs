@@ -1,8 +1,8 @@
 package Source;
 
 public enum MeetingStatus  {
-    Unmet(0),
-    Met(1);
+    Unmet(1),
+    Met(2);
     private int id;
 
     private MeetingStatus(int id) {

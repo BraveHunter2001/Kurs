@@ -1,10 +1,10 @@
 package Source;
 
 public enum TaskStatus {
-    Failed(-1),
-    NotTaken(0),
-    Taken(1),
-    Done(2);
+    Failed(1),
+    NotTaken(2),
+    Taken(3),
+    Done(4);
 
     private int id;
 
