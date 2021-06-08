@@ -43,6 +43,7 @@ public class MainForm extends JFrame{
     private JLabel sortByLabel;
     private JComboBox<CharacterColumns> sortParamBox;
 
+    // characters
     private DefaultTableModel charaterModel;
     private JTable charactersTable;
     private JScrollPane scroll;
@@ -51,6 +52,8 @@ public class MainForm extends JFrame{
     private DefaultTableModel taskModel;
     private JTable taskTable;
     private JScrollPane taskScroll;
+
+    private DefaultTableModel currentModel;
 
 
     //panels
@@ -180,12 +183,6 @@ public class MainForm extends JFrame{
             }
         };
 
-        charactersTable = new JTable(charaterModel);
-
-        scroll = new JScrollPane(charactersTable);
-        charactersPanel.add(scroll,BorderLayout.CENTER);
-
-
         //init task table
 
         taskModel = new DefaultTableModel(null, TasksColumns.values()){
@@ -195,6 +192,12 @@ public class MainForm extends JFrame{
                 return  false;
             }
         };
+
+        charactersTable = new JTable(charaterModel);
+
+        scroll = new JScrollPane(charactersTable);
+        charactersPanel.add(scroll,BorderLayout.CENTER);
+
 
         taskTable = new JTable(taskModel);
         taskScroll = new JScrollPane(taskTable);
@@ -256,6 +259,13 @@ public class MainForm extends JFrame{
             }
         });
 
+        modeParamBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED);
+                    ChangeMode();
+            }
+        });
 
         charactersTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -325,6 +335,7 @@ public class MainForm extends JFrame{
                 ImportXML();
             }
         });
+
         exportPDFMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -363,6 +374,43 @@ public class MainForm extends JFrame{
         setVisible(true);
     }
 
+
+    void ChangeMode()
+    {
+        if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+        {
+            setVisible(false);
+            tablesPanel.remove(tasksPanel);
+            tablesPanel.remove(charactersPanel);
+
+            tablesPanel.add(tasksPanel);
+            tablesPanel.add(charactersPanel);
+            setVisible(true);
+            currentModel = charaterModel;
+        }
+        else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+        {
+            setVisible(false);
+            tablesPanel.remove(tasksPanel);
+            tablesPanel.remove(charactersPanel);
+
+            tablesPanel.add(charactersPanel);
+            tablesPanel.add(tasksPanel);
+            setVisible(true);
+            currentModel = taskModel;
+        } else if (modeParamBox.getSelectedItem() == ProgramMode.Both)
+        {
+            setVisible(false);
+            tablesPanel.remove(tasksPanel);
+            tablesPanel.remove(charactersPanel);
+
+            tablesPanel.add(charactersPanel);
+            tablesPanel.add(tasksPanel);
+            currentModel = null;
+            setVisible(true);
+        }
+
+    }
 
     void Add()
     {
@@ -454,6 +502,7 @@ public class MainForm extends JFrame{
     {
         data = sdata;
     }
+
     public CharactersTable GetData()
     {
         return data;
