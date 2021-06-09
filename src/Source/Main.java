@@ -11,20 +11,17 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Start program");
 
-        Task t2 = new Task(1,"stop", TaskStatus.Taken);
+        Task t2 = new Task(1,"stop", "Taken");
         List<Task> ts = new ArrayList<>();
         ts.add(t2);
-        ts.add(new Task(2,"Peraliz", TaskStatus.Failed));
+        ts.add(new Task(2,"Peraliz", "Failed"));
         TaskTable taskTable = new TaskTable(ts);
 
         List<Character> chs = new ArrayList<>();
         chs.add(CharactersTable.DefaultCharacter);
-        chs.add(new Character(1, "Ilya", "Human", "Vil",MeetingStatus.Unmet));
+        chs.add(new Character(1, "Ilya", "Human", "Vil", "Unmet"));
 
-        for (Task task : ts)
-            chs.get(1).AddTask(task);
-        for (Task task : ts)
-            task.addCharacter(chs.get(1));
+
 
         CharactersTable chsTable = new CharactersTable(chs);
         new MainForm(chsTable, taskTable);

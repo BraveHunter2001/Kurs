@@ -4,7 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
 public class TaskTable extends DataTable{
-    public static Task DefaultTask = new Task(0, "Found 10 mashrooms", TaskStatus.Taken);
+    public static Task DefaultTask = new Task(0, "Found 10 mashrooms", "Taken");
 
     public static List<Task> DefaultTasks = Arrays.asList(new Task[]{DefaultTask});
 
