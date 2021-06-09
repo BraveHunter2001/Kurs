@@ -21,8 +21,10 @@ public class Main {
         chs.add(CharactersTable.DefaultCharacter);
         chs.add(new Character(1, "Ilya", "Human", "Vil",MeetingStatus.Unmet));
 
-        chs.get(1).SetTasks(ts);
-        ts.get(0).SetCharacters(chs);
+        for (Task task : ts)
+            chs.get(1).AddTask(task);
+        for (Task task : ts)
+            task.addCharacter(chs.get(1));
 
         CharactersTable chsTable = new CharactersTable(chs);
         new MainForm(chsTable, taskTable);

@@ -14,6 +14,8 @@ import java.util.List;
 
 public class Character extends Line {
 
+    List<Task> tasks;
+
     public Character() { super(); }
 
     public Character(Object[] ln) throws IllegalArgumentException
@@ -23,6 +25,8 @@ public class Character extends Line {
         if (ln.length != CharacterColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
         line = ln;
+        if ((List<Task>)ln[CharacterColumns.Tasks.GetId()] != null)
+            tasks = (List<Task>)ln[CharacterColumns.Tasks.GetId()];
     }
 
     public Character(String[] strs) throws IllegalArgumentException
@@ -33,9 +37,7 @@ public class Character extends Line {
             throw new IllegalArgumentException("array length doesn't match column count!");
 
         if (line == null)
-            line = new Object[6];
-
-
+            line = new Object[5];
 
 
         line[CharacterColumns.ID.GetId()] = Integer.parseInt(strs[CharacterColumns.ID.GetId()]);
@@ -43,7 +45,7 @@ public class Character extends Line {
         line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
         line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[CharacterColumns.MeetingStatus.GetId()]);
-        line[CharacterColumns.Tasks.GetId()] = Separate(strs[CharacterColumns.Tasks.GetId()]);
+        tasks = Separate(strs[CharacterColumns.Tasks.GetId()]);
     }
 
 
@@ -51,12 +53,14 @@ public class Character extends Line {
     {
         if (line == null)
             line = new Object[6];
+        if (tasks == null)
+            tasks = new ArrayList<>();
         line[CharacterColumns.ID.GetId()] = ID;
         line[CharacterColumns.Name.GetId()] = Name;
         line[CharacterColumns.Apperance.GetId()] = Apperance;
         line[CharacterColumns.Location.GetId()] = Location;
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus;
-
+        line[CharacterColumns.Tasks.GetId()] = tasks;
     }
 
     public Character(Node nod)
@@ -81,6 +85,7 @@ public class Character extends Line {
             throw new IndexOutOfBoundsException(columnIndex);
 
         line[columnIndex] = value;
+        tasks = (List<Task>)line[CharacterColumns.Tasks.GetId()];
     }
 
 
@@ -99,12 +104,44 @@ public class Character extends Line {
         return line[CharacterColumns.Location.GetId()].toString();
     }
 
-    List<Task> GetTasks() {return (List<Task>)line[CharacterColumns.Tasks.GetId()];}
+    List<Task> GetTasks() {return tasks;}
 
-    public void SetTasks(List<Task> tasks) {line[CharacterColumns.Tasks.GetId()] = tasks;}
+    public void SetTasks(List<Task> taks) {
+        tasks  = taks;
+        line[CharacterColumns.Tasks.GetId()] = tasks;
+    }
+
+    public void AddTask(Task ts){
+
+        for (int i = 0; i < tasks.size(); i++)
+            if (ts.GetID() == tasks.get(i).GetID())
+                return;
+
+        tasks.add(ts);
+        //ts.addCharacter(this);
+    }
+
+    public void RemoveTask (Task ts) {
+        for (int i = 0; i < tasks.size(); i++)
+            if (ts.GetID() == tasks.get(i).GetID())
+            {
+                tasks.remove(i);
+               // ts.removeCharacter(this);
+            }
+
+    }
+
+    public void RemoveAllTasks()
+    {
+        for(int i = 0; i < tasks.size(); i++)
+            RemoveTask(tasks.get(i));
+    }
+
     public String getTaskString(){
         String res ="";
-        List<Task> tasks = (List<Task>)line[CharacterColumns.Tasks.GetId()];
+
+        if (tasks == null)
+            return res;
         for (int i=0; i< tasks.size(); i++)
         {
             String temp = Integer.toString(tasks.get(i).GetID()) + ',' + tasks.get(i).GetName() + ',' +tasks.get(i).GetTaskStatus().toString();
@@ -115,7 +152,6 @@ public class Character extends Line {
 
         return res;
     }
-
 
     MeetingStatus GetMeetingStatus()
     {

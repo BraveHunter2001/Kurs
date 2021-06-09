@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Class menu create or change charter data
@@ -30,6 +31,7 @@ public class CharacterForm extends JFrame
 
     private JButton ButtonOk;
     public Character ChangedCharacter;
+    TaskTable dataTsk;
 
     /**
      * Constructer for add character
@@ -37,7 +39,7 @@ public class CharacterForm extends JFrame
      * @param model
      * @param data
      */
-    public CharacterForm(String title, DefaultTableModel model, CharactersTable data)
+    public CharacterForm(String title, DefaultTableModel model, CharactersTable data, TaskTable taskData)
     {
         //init
         super(title);
@@ -45,6 +47,7 @@ public class CharacterForm extends JFrame
         setLocation(500, 250);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ChangedCharacter = CharactersTable.DefaultCharacter;
+        dataTsk = taskData;
         //Name
         NameLabel = new JLabel("Name:");
         NameField = new JTextField();
@@ -199,14 +202,12 @@ public class CharacterForm extends JFrame
      */
     void Add(DefaultTableModel model, CharactersTable data)
     {
-        ChangedCharacter.line[CharacterColumns.Name.GetId()] = NameField.getText();
-        ChangedCharacter.line[CharacterColumns.Location.GetId()] = LocationField.getText();
-        ChangedCharacter.line[CharacterColumns.Apperance.GetId()] = ApperanceField.getText();
-        //ChangedCharacter.line[CharacterColumns.Task.GetId()] = TaskField.getText();
-       // ChangedCharacter.line[CharacterColumns.TaskStatus.GetId()] = TaskStatusParamBox.getSelectedItem();
-        ChangedCharacter.line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatusParamBox.getSelectedItem();
-
-        model.addRow(data.AddRow(ChangedCharacter.GetData()));
+        Character ch = new Character(0,NameField.getText(),
+                ApperanceField.getText(),
+                LocationField.getText(),
+                (MeetingStatus) MeetingStatusParamBox.getSelectedItem());
+        ch.SetTasks(dataTsk.ParseTask(TaskField.getText()));
+        model.addRow(data.AddRow(ch.GetData()));
     }
 
     /**
@@ -221,8 +222,6 @@ public class CharacterForm extends JFrame
         lineData[CharacterColumns.Name.GetId() - 1] = NameField.getText();
         lineData[CharacterColumns.Apperance.GetId() - 1] = ApperanceField.getText();
         lineData[CharacterColumns.Location.GetId() - 1] = LocationField.getText();
-        //lineData[CharacterColumns.Task.GetId() - 1] = TaskField.getText();
-        //lineData[CharacterColumns.TaskStatus.GetId() - 1] = TaskStatusParamBox.getSelectedItem();
         lineData[CharacterColumns.MeetingStatus.GetId() - 1] = MeetingStatusParamBox.getSelectedItem();
 
         for (int i = 1; i < model.getColumnCount() - 1; i++)

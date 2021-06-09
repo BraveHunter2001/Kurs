@@ -8,11 +8,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Task extends Line{
 
-
+    List<Character> characters;
     public Task() { super(); }
 
     public Task(Object[] ln) throws IllegalArgumentException
@@ -22,16 +23,20 @@ public class Task extends Line{
         if (ln.length != TasksColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
         line = ln;
+        if ((List<Character>)ln[TasksColumns.Characters.GetId()] != null)
+            characters = (List<Character>)ln[TasksColumns.Characters.GetId()];
     }
 
     public Task(int ID, String Name, TaskStatus TaskStatus)
     {
         if (line == null)
             line = new Object[4];
+        if (characters == null)
+            characters = new ArrayList<>();
         line[TasksColumns.ID.GetId()] = ID;
         line[TasksColumns.Name.GetId()] = Name;
         line[TasksColumns.TaskStatus.GetId()] = TaskStatus;
-
+        line[TasksColumns.Characters.GetId()] = characters;
     }
 
     public Task(String[] strs) throws IllegalArgumentException
@@ -42,12 +47,12 @@ public class Task extends Line{
             throw new IllegalArgumentException("array length doesn't match column count!");
 
         if (line == null)
-            line = new Object[3];
+            line = new Object[4];
 
         line[TasksColumns.ID.GetId()] = Integer.parseInt(strs[TasksColumns.ID.GetId()]);
         line[TasksColumns.Name.GetId()] = strs[TasksColumns.Name.GetId()];
         line[TasksColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(strs[TasksColumns.TaskStatus.GetId()]);
-
+        line[TasksColumns.Characters.GetId()] = characters;
     }
 
 
@@ -89,11 +94,44 @@ public class Task extends Line{
 
     List<Character> GetCharaters()
     {
-        return (List<Character>)line[TasksColumns.Characters.GetId()];
+        return characters;
     }
 
-    public void SetCharacters(List<Character> chs) {
-        line[TasksColumns.Characters.GetId()] = chs;
+    public void SetCharacters(List<Character> chs)
+    {
+
+        characters = chs;
+        line[TasksColumns.Characters.GetId()] = characters;
+    }
+
+    public void addCharacter(Character ch)
+    {
+        for (int i = 0; i < characters.size(); i++)
+        {
+            int idThis = characters.get(i).GetID();
+            int idCh = ch.GetID();
+            if (idThis == idCh)
+                return;
+        }
+        characters.add(ch);
+       // ch.AddTask(this);
+    }
+    public void removeCharacter(Character ch) {
+        for (int i = 0; i < characters.size(); i++)
+        {
+            if (ch.GetID() == characters.get(i).GetID())
+            {
+                characters.remove(i);
+               // ch.RemoveTask(this);
+            }
+        }
+
+
+    }
+    public void RemoveAllCharacter()
+    {
+        for (int i =0; i < characters.size(); i++)
+            removeCharacter(characters.get(i));
     }
 
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException

@@ -450,9 +450,8 @@ public class MainForm extends JFrame{
 
     void Add()
     {
-        new CharacterForm("Add", charaterModel, data);
+        new CharacterForm("Add", charaterModel, data, taskData);
     }
-
 
     void Delete()
     {

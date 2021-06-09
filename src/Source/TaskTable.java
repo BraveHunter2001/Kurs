@@ -148,4 +148,23 @@ public class TaskTable extends DataTable{
     public List<Task> Rows(){
         return rows;
     }
+
+    public List<Task> ParseTask(String str)
+    {
+        if (str.equals("") || rows == null)
+            return null;
+        String[] splitted= str.split(",");
+
+        List<Task> res = new ArrayList<>();
+
+        for (int i = 0; i< splitted.length; i++)
+        {
+            for (int j =0; j < rows.size(); j++)
+            {
+                if (Integer.parseInt(splitted[i]) == rows.get(j).GetID())
+                        res.add(rows.get(j));
+            }
+        }
+        return res;
+    }
 }
