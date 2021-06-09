@@ -134,6 +134,26 @@ public class Task extends Line{
             removeCharacter(characters.get(i));
     }
 
+    public String getCharactersString(){
+        String res ="";
+
+        if (characters == null)
+            return res;
+        for (int i=0; i< characters.size(); i++)
+        {
+            String temp = Integer.toString(characters.get(i).GetID()) + ','
+                    + characters.get(i).GetName() + ','
+                    + characters.get(i).GetApperance() + ','
+                    + characters.get(i).GetLocation() + ','
+                    + characters.get(i).GetLocation() + ',';
+            if(i != characters.size() - 1)
+                temp += ':';
+            res += temp;
+        }
+
+        return res;
+    }
+
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
     {
 

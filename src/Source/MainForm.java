@@ -8,6 +8,8 @@ import Import.*;
 import Export.TXTExporter;
 import Import.TXTImporter;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -179,7 +181,7 @@ public class MainForm extends JFrame{
             @Override
             public boolean isCellEditable(int row, int column)
             {
-                return  false;
+                return  column != 0;
             }
         };
 
@@ -189,11 +191,16 @@ public class MainForm extends JFrame{
             @Override
             public boolean isCellEditable(int row, int column)
             {
-                return  false;
+                return  column != 0;
             }
         };
 
         charactersTable = new JTable(charaterModel);
+
+        JComboBox<MeetingStatus> combo = new JComboBox<>(MeetingStatus.values());
+        DefaultCellEditor editor = new DefaultCellEditor(combo);
+
+        charactersTable.getColumnModel().getColumn(CharacterColumns.MeetingStatus.GetId()).setCellEditor(editor);
 
         scroll = new JScrollPane(charactersTable);
         charactersPanel.add(scroll,BorderLayout.CENTER);
@@ -267,16 +274,17 @@ public class MainForm extends JFrame{
             }
         });
 
-        charactersTable.addMouseListener(new MouseAdapter() {
+        charaterModel.addTableModelListener(new TableModelListener() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                JTable table = (JTable) e.getSource();
-                Point point = e.getPoint();
-                int row = table.rowAtPoint(point);
-                if (e.getClickCount() == 2 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Characters)
-                {
-                    Change(row);
-                }
+            public void tableChanged(TableModelEvent e) {
+                ChangeCharaterRow(e.getFirstRow(), e.getColumn());
+            }
+        });
+
+        taskModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                ChangeTaskRow(e.getFirstRow(), e.getColumn());
             }
         });
 
@@ -450,7 +458,7 @@ public class MainForm extends JFrame{
 
     void Add()
     {
-        new CharacterForm("Add", charaterModel, data, taskData);
+        charaterModel.addRow(data.AddRow(CharactersTable.DefaultCharacter.GetData()));;
     }
 
     void Delete()
@@ -506,9 +514,26 @@ public class MainForm extends JFrame{
         Sort();
     }
 
-    void Change(int row)
+    void ChangeCharaterRow(int row, int column)
     {
-        new CharacterForm("Change", charaterModel, data, row);
+        if(row >= 0 && column >= 0)
+        {
+            Object newValue = charaterModel.getValueAt(row, column);
+            int id = Integer.parseInt(charaterModel.getValueAt(row, 0).toString());
+             data.ChangeRow(id, column, newValue);
+
+        }
+    }
+
+    void ChangeTaskRow(int row, int column)
+    {
+        if(row >= 0 && column >= 0)
+        {
+            Object newValue = taskModel.getValueAt(row, column);
+            int id = Integer.parseInt(taskModel.getValueAt(row, 0).toString());
+            taskData.ChangeRow(id, column, newValue);
+
+        }
     }
 
     void ShowTasks(int row)

@@ -51,6 +51,7 @@ public class TaskTable extends DataTable{
     {
         if (index >= TasksColumns.values().length || index < 0 )
             throw  new IndexOutOfBoundsException(index);
+        GetRowAt(index,model).RemoveAllCharacter();
         model.removeRow(index);
         rows.remove(index);
     }

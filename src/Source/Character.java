@@ -144,9 +144,9 @@ public class Character extends Line {
             return res;
         for (int i=0; i< tasks.size(); i++)
         {
-            String temp = Integer.toString(tasks.get(i).GetID()) + ',' + tasks.get(i).GetName() + ',' +tasks.get(i).GetTaskStatus().toString();
+            String temp = tasks.get(i).GetName();
             if(i != tasks.size() - 1)
-                temp += ':';
+                temp += ',';
             res += temp;
         }
 
