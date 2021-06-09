@@ -27,7 +27,7 @@ public class Task extends Line{
             characters = (List<Character>)ln[TasksColumns.Characters.GetId()];
     }
 
-    public Task(int ID, String Name, TaskStatus TaskStatus)
+    public Task(int ID, String Name, String TaskStatus)
     {
         if (line == null)
             line = new Object[4];
@@ -51,7 +51,7 @@ public class Task extends Line{
 
         line[TasksColumns.ID.GetId()] = Integer.parseInt(strs[TasksColumns.ID.GetId()]);
         line[TasksColumns.Name.GetId()] = strs[TasksColumns.Name.GetId()];
-        line[TasksColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(strs[TasksColumns.TaskStatus.GetId()]);
+        line[TasksColumns.TaskStatus.GetId()] = strs[TasksColumns.TaskStatus.GetId()];
         line[TasksColumns.Characters.GetId()] = characters;
     }
 
@@ -66,7 +66,7 @@ public class Task extends Line{
             value[i] = attrs.getNamedItem(TasksColumns.values()[i].toString()).getNodeValue();
         }
 
-        value[TasksColumns.TaskStatus.GetId()] = TaskStatus.getStatusByStr(attrs.getNamedItem(TasksColumns.values()[TasksColumns.TaskStatus.GetId()].toString()).getNodeValue());
+        value[TasksColumns.TaskStatus.GetId()] = attrs.getNamedItem(TasksColumns.values()[TasksColumns.TaskStatus.GetId()].toString()).getNodeValue();
         line = value;
     }
 
@@ -88,9 +88,9 @@ public class Task extends Line{
         return line[TasksColumns.Name.GetId()].toString();
     }
 
-    TaskStatus GetTaskStatus()
+    String GetTaskStatus()
     {
-        return (TaskStatus) line[TasksColumns.TaskStatus.GetId()];
+        return (String) line[TasksColumns.TaskStatus.GetId()];
     }
 
     List<Character> GetCharaters()

@@ -44,12 +44,12 @@ public class Character extends Line {
         line[CharacterColumns.Name.GetId()] = strs[CharacterColumns.Name.GetId()];
         line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
         line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
-        line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(strs[CharacterColumns.MeetingStatus.GetId()]);
+        line[CharacterColumns.MeetingStatus.GetId()] = strs[CharacterColumns.MeetingStatus.GetId()];
         tasks = Separate(strs[CharacterColumns.Tasks.GetId()]);
     }
 
 
-    public Character(int ID, String Name, String Apperance, String Location, MeetingStatus MeetingStatus)
+    public Character(int ID, String Name, String Apperance, String Location, String MeetingStatus)
     {
         if (line == null)
             line = new Object[6];
@@ -72,7 +72,7 @@ public class Character extends Line {
         {
             value[i] = attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue();
         }
-        value[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus.getStatusByStr(attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue());
+        value[CharacterColumns.MeetingStatus.GetId()] = attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue();
 
 
         value[CharacterColumns.Tasks.GetId()] = null;
@@ -152,9 +152,9 @@ public class Character extends Line {
         return res;
     }
 
-    MeetingStatus GetMeetingStatus()
+    String GetMeetingStatus()
     {
-        return (MeetingStatus) line[CharacterColumns.MeetingStatus.GetId()];
+        return (String) line[CharacterColumns.MeetingStatus.GetId()];
     }
 
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
