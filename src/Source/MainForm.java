@@ -290,6 +290,23 @@ public class MainForm extends JFrame{
                 if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Characters)
                 {
                     ShowTasks(row);
+
+
+                }
+            }
+        });
+
+        // show characters
+        taskTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JTable table = (JTable) e.getSource();
+                Point point = e.getPoint();
+                int row = table.rowAtPoint(point);
+                if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                {
+                    ShowCharacters(row);
+
                 }
             }
         });
@@ -380,8 +397,8 @@ public class MainForm extends JFrame{
         if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
         {
             setVisible(false);
-            tablesPanel.remove(tasksPanel);
             tablesPanel.remove(charactersPanel);
+            tablesPanel.remove(tasksPanel);
 
             tablesPanel.add(tasksPanel);
             tablesPanel.add(charactersPanel);
@@ -389,6 +406,10 @@ public class MainForm extends JFrame{
             taskData.InsertDataInTableModel(taskModel);
 
             currentModel = taskModel;
+
+            //charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+            if (taskTable.getColumnModel().getColumnCount() >3)
+                taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -400,6 +421,10 @@ public class MainForm extends JFrame{
             tablesPanel.add(charactersPanel);
             tablesPanel.add(tasksPanel);
             data.InsertDataInTableModel(charaterModel);
+
+            if (charactersTable.getColumnModel().getColumnCount() >5)
+                charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+            //taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
             setVisible(true);
             currentModel = charaterModel;
         } else if (modeParamBox.getSelectedItem() == ProgramMode.Both)
@@ -414,6 +439,10 @@ public class MainForm extends JFrame{
             data.InsertDataInTableModel(charaterModel);
             taskData.InsertDataInTableModel(taskModel);
             currentModel = null;
+            if (charactersTable.getColumnModel().getColumnCount() >5)
+                charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+            if (taskTable.getColumnModel().getColumnCount() >3)
+                taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
             setVisible(true);
         }
 
@@ -433,7 +462,7 @@ public class MainForm extends JFrame{
         {
             JOptionPane.showMessageDialog(null, "Select the row to delete!");
         }
-        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+
     }
 
     void Search()
@@ -450,20 +479,20 @@ public class MainForm extends JFrame{
             viewData = data.Search(searchParamBox.getSelectedIndex(), searchField.getText());
             viewData.InsertDataInTableModel(charaterModel);
         }
-        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+
     }
 
     void Sort()
     {
         viewData.Sort(sortParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
-        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+
     }
 
     void NewTable()
     {
         viewData = data = new CharactersTable();
         viewData.InsertDataInTableModel(charaterModel);
-        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+
     }
 
     void Save()
@@ -488,6 +517,19 @@ public class MainForm extends JFrame{
         Character ch = data.GetRowAt(row, charaterModel);
         viewTaskData = new TaskTable(ch.GetTasks());
         viewTaskData.InsertDataInTableModel(taskModel);
+        //charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+        if (taskTable.getColumnModel().getColumnCount() >3)
+            taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+    }
+
+    void ShowCharacters(int row)
+    {
+        Task ts = taskData.GetRowAt(row, taskModel);
+        viewData = new CharactersTable(ts.GetCharaters());
+        viewData.InsertDataInTableModel(charaterModel);
+        if (charactersTable.getColumnModel().getColumnCount() >5)
+            charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
+        //taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
     }
 
     void ExportXML()

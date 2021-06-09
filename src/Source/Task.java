@@ -8,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.util.List;
+
 public class Task extends Line{
 
 
@@ -15,13 +17,17 @@ public class Task extends Line{
 
     public Task(Object[] ln) throws IllegalArgumentException
     {
-        super(ln);
+        if (ln == null || ln.length == 0)
+            throw new IllegalArgumentException("argument was null or empty!");
+        if (ln.length != TasksColumns.values().length)
+            throw new IllegalArgumentException("array length doesn't match column count!");
+        line = ln;
     }
 
     public Task(int ID, String Name, TaskStatus TaskStatus)
     {
         if (line == null)
-            line = new Object[3];
+            line = new Object[4];
         line[TasksColumns.ID.GetId()] = ID;
         line[TasksColumns.Name.GetId()] = Name;
         line[TasksColumns.TaskStatus.GetId()] = TaskStatus;
@@ -81,9 +87,13 @@ public class Task extends Line{
         return (TaskStatus) line[TasksColumns.TaskStatus.GetId()];
     }
 
-    int[] GetIdCharaters()
+    List<Character> GetCharaters()
     {
-        return (int[])line[TasksColumns.Characters.GetId()];
+        return (List<Character>)line[TasksColumns.Characters.GetId()];
+    }
+
+    public void SetCharacters(List<Character> chs) {
+        line[TasksColumns.Characters.GetId()] = chs;
     }
 
     boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException

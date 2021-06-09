@@ -18,7 +18,11 @@ public class Character extends Line {
 
     public Character(Object[] ln) throws IllegalArgumentException
     {
-        super(ln);
+        if (ln == null || ln.length == 0)
+            throw new IllegalArgumentException("argument was null or empty!");
+        if (ln.length != CharacterColumns.values().length)
+            throw new IllegalArgumentException("array length doesn't match column count!");
+        line = ln;
     }
 
     public Character(String[] strs) throws IllegalArgumentException

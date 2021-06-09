@@ -98,6 +98,12 @@ public class CharactersTable {
 
     public void InsertDataInTableModel (DefaultTableModel model)
     {
+        if (rows == null)
+        {
+            model.setDataVector(null, CharacterColumns.values());
+            return;
+        }
+
         Object[][] array = new Object[rows.size()][];
         for(int i =0; i< rows.size(); i++)
         {
