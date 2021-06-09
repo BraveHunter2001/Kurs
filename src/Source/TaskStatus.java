@@ -30,7 +30,7 @@ public enum TaskStatus {
     {
         for (TaskStatus status :values())
         {
-            if (status.toString().equals(str))
+            if (status.toString().toLowerCase().equals(str.toLowerCase()))
             {
                 return status;
             }

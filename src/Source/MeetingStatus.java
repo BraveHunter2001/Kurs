@@ -1,5 +1,7 @@
 package Source;
 
+import java.util.Locale;
+
 public enum MeetingStatus  {
     Unmet(1),
     Met(2);
@@ -26,7 +28,7 @@ public enum MeetingStatus  {
     {
         for (MeetingStatus status :values())
         {
-            if (status.toString().equals(str))
+            if (status.toString().toLowerCase().equals(str.toLowerCase()))
             {
                 return status;
             }

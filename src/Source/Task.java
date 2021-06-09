@@ -74,7 +74,8 @@ public class Task extends Line{
     {
         if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
-        line[columnIndex] = value;
+
+            line[columnIndex] = value;
     }
 
     public int GetID()

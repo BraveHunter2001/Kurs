@@ -197,11 +197,6 @@ public class MainForm extends JFrame{
 
         charactersTable = new JTable(charaterModel);
 
-        JComboBox<MeetingStatus> combo = new JComboBox<>(MeetingStatus.values());
-        DefaultCellEditor editor = new DefaultCellEditor(combo);
-
-        charactersTable.getColumnModel().getColumn(CharacterColumns.MeetingStatus.GetId()).setCellEditor(editor);
-
         scroll = new JScrollPane(charactersTable);
         charactersPanel.add(scroll,BorderLayout.CENTER);
 

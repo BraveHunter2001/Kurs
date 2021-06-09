@@ -84,8 +84,7 @@ public class Character extends Line {
         if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
 
-        line[columnIndex] = value;
-        tasks = (List<Task>)line[CharacterColumns.Tasks.GetId()];
+            line[columnIndex] = value;
     }
 
 
