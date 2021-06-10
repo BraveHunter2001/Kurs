@@ -298,6 +298,14 @@ public class MainForm extends JFrame{
             }
         });
 
+        sortTaskParamBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED)
+                    SortTask();
+            }
+        });
+
         modeParamBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -617,7 +625,11 @@ public class MainForm extends JFrame{
     void SortCharacter()
     {
         viewCharacterData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
+    }
 
+    void SortTask()
+    {
+        viewTaskData.Sort(sortTaskParamBox.getSelectedIndex()).InsertDataInTableModel(taskModel);
     }
 
     void NewTable()
