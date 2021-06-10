@@ -64,6 +64,7 @@ public class MainForm extends JFrame{
     private JPanel tablesPanel;
 
     private JButton connectButton;
+    private JButton unConnectionButton;
 
     ConnectionTable connectionTable;
 
@@ -125,6 +126,7 @@ public class MainForm extends JFrame{
         addButton = new JButton(new ImageIcon("./img/add.png"));
         removeButton = new JButton(new ImageIcon("./img/remove.png"));
         connectButton = new JButton("Connect");
+        unConnectionButton = new JButton("Un connect");
 
         ModeLabel = new JLabel("Program mode:");
         modeParamBox = new JComboBox<ProgramMode>(ProgramMode.values());
@@ -147,6 +149,7 @@ public class MainForm extends JFrame{
         toolBar.add(ModeLabel);
         toolBar.add(modeParamBox);
         toolBar.add(connectButton);
+        toolBar.add(unConnectionButton);
 
         toolBar.add(Box.createHorizontalStrut(5));
         toolBar.add(new JSeparator(SwingConstants.VERTICAL));
@@ -238,6 +241,13 @@ public class MainForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ConnectChTsk();
+            }
+        });
+
+        unConnectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UnConnectChTsk();
             }
         });
 
@@ -403,6 +413,14 @@ public class MainForm extends JFrame{
         viewTaskData.InsertDataInTableModel(taskModel);
 
 
+        searchByLabel.setVisible(false);
+        searchField.setVisible(false);
+        searchButton.setVisible(false);
+        searchParamBox.setVisible(false);
+
+        sortByLabel.setVisible(false);
+        sortParamBox.setVisible(false);
+
         setVisible(true);
     }
 
@@ -422,6 +440,17 @@ public class MainForm extends JFrame{
 
             currentModel = taskModel;
             connectButton.setVisible(false);
+            unConnectionButton.setVisible(false);
+
+            searchByLabel.setVisible(true);
+            searchField.setVisible(true);
+            searchButton.setVisible(true);
+            searchParamBox.setVisible(true);
+
+            sortByLabel.setVisible(true);
+            sortParamBox.setVisible(true);
+
+
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -435,6 +464,15 @@ public class MainForm extends JFrame{
             data.InsertDataInTableModel(charaterModel);
 
             connectButton.setVisible(false);
+            unConnectionButton.setVisible(false);
+
+            searchByLabel.setVisible(true);
+            searchField.setVisible(true);
+            searchButton.setVisible(true);
+            searchParamBox.setVisible(true);
+
+            sortByLabel.setVisible(true);
+            sortParamBox.setVisible(true);
 
             setVisible(true);
 
@@ -451,7 +489,18 @@ public class MainForm extends JFrame{
             data.InsertDataInTableModel(charaterModel);
             taskData.InsertDataInTableModel(taskModel);
             currentModel = null;
+
             connectButton.setVisible(true);
+            unConnectionButton.setVisible(true);
+
+            searchByLabel.setVisible(false);
+            searchField.setVisible(false);
+            searchButton.setVisible(false);
+            searchParamBox.setVisible(false);
+
+            sortByLabel.setVisible(false);
+            sortParamBox.setVisible(false);
+
             setVisible(true);
         }
 
@@ -574,6 +623,30 @@ public class MainForm extends JFrame{
             int idTask = (int) taskModel.getValueAt(indexRowTask, 0);
 
             connectionTable.Connect(idCharacter, idTask);
+        }
+    }
+
+    void UnConnectChTsk()
+    {
+        int indexRowCharacter = charactersTable.getSelectedRow();
+        int indexRowTask = taskTable.getSelectedRow();
+
+        try {
+            if (indexRowCharacter < 0) {
+                throw new IndexOutOfBoundsException(indexRowCharacter);
+            } else if (indexRowTask < 0) {
+                throw new IndexOutOfBoundsException(indexRowTask);
+            }
+        }catch ( IndexOutOfBoundsException e)
+        {
+            JOptionPane.showMessageDialog(null, "Select the rows to unconnect!");
+        }
+
+        if (indexRowCharacter >= 0 && indexRowTask >= 0) {
+            int idCharacter = (int) charaterModel.getValueAt(indexRowCharacter, 0);
+            int idTask = (int) taskModel.getValueAt(indexRowTask, 0);
+
+            connectionTable.UnConnect(idCharacter, idTask);
         }
     }
 

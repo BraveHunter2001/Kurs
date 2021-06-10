@@ -26,6 +26,20 @@ public class ConnectionTable {
         connectionList.add(par);
     }
 
+    public void UnConnect(int idCharacter, int idTask)
+    {
+        int[] par = new int[2];
+        par[0] = idCharacter;
+        par[1] = idTask;
+        for (int i=0; i < connectionList.size(); i++)
+        {
+            int[] idPar = connectionList.get(i);
+            if (idPar[0] == idCharacter && idPar[1] == idTask)
+                connectionList.remove(i);
+        }
+
+    }
+
     public List<Integer> GetTasksForCharacter(int idCharacter)
     {
         List<Integer> res = new ArrayList<>();
