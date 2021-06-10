@@ -547,7 +547,10 @@ public class MainForm extends JFrame{
 
     void ShowCharacters(int row)
     {
-
+        int idTask = (int)taskModel.getValueAt(row, 0);
+        var hisCharacter = connectionTable.GetCharactersForTask(idTask);
+        viewData = data.GetCharacterTableById(hisCharacter);
+        viewData.InsertDataInTableModel(charaterModel);
     }
 
     void ConnectChTsk()

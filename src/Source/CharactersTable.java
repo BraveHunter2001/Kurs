@@ -151,4 +151,24 @@ public class CharactersTable {
         return rows;
     }
 
+    public CharactersTable GetCharacterTableById(List<Integer> ids)
+    {
+        List<Character> res = new ArrayList<>();
+        if (ids == null)
+        {
+            res = null;
+            return new CharactersTable(res);
+        }
+
+        for (int i = 0; i < rows.size(); i++)
+        {
+            for (int j =0; j < ids.size(); j++)
+            {
+                if (rows.get(i).GetID() == ids.get(j))
+                    res.add(rows.get(i));
+            }
+        }
+
+        return new CharactersTable(res);
+    }
 }
