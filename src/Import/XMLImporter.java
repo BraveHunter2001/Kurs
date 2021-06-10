@@ -69,12 +69,4 @@ public class XMLImporter extends  JFrame{
 
 
 
-    /**
-     * Function for get DataTable for lab 8
-     * @return - Data
-     */
-    public CharactersTable ReadData()
-    {
-        return readableData;
-    }
 }

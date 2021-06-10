@@ -17,7 +17,7 @@ import javax.swing.JFrame;
  */
 public class TXTExporter extends  JFrame
 {
-    public TXTExporter(String str, CharactersTable data)
+    public TXTExporter(String str, DataTable data)
     {
         FileDialog fileDialog = new FileDialog(this, str, FileDialog.SAVE);
         fileDialog.setFile("*.txt");
@@ -29,13 +29,16 @@ public class TXTExporter extends  JFrame
         {
             try{
                 BufferedWriter writer = new BufferedWriter( new FileWriter(fileFullName));
+
                 for (int i = 0; i < data.Rows().size(); i++)
                 {
-                    var line = data.Rows().get(i).GetData();
-                    for(int j = 0; j < line.length; j++)
+                    Line line = (Line)data.Rows().get(i);
+                    var lineData = line.GetData();
+
+                    for(int j = 0; j < lineData.length; j++)
                     {
-                        writer.write(line[j].toString());
-                        if(j != line.length -1 )
+                        writer.write(lineData[j].toString());
+                        if(j != lineData.length -1 )
                             writer.write("|");
                     }
 

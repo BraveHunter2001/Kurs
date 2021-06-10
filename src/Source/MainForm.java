@@ -364,14 +364,20 @@ public class MainForm extends JFrame{
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Save();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    Save(viewCharacterData);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    Save(viewTaskData);
             }
         });
 
         saveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Save();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    Save(viewCharacterData);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    Save(viewTaskData);
             }
         });
 
@@ -623,9 +629,9 @@ public class MainForm extends JFrame{
 
     }
 
-    void Save()
+    void Save(DataTable viewData)
     {
-        new TXTExporter("Save table", viewCharacterData);
+        new TXTExporter("Save table", viewData);
     }
 
     void Load()
