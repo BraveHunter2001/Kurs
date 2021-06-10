@@ -636,9 +636,11 @@ public class MainForm extends JFrame{
 
     void Load()
     {
-        new TXTImporter("Load table",this, charaterModel);
+        new TXTImporter("Load table",this,  (ProgramMode) modeParamBox.getSelectedItem());
         viewCharacterData = characterData;
-        //SortCharacter();
+        viewTaskData = taskData;
+        Sort(viewCharacterData,sortCharacterParamBox,charaterModel);
+        Sort(viewTaskData,sortTaskParamBox,taskModel);
     }
 
     void ChangeRow(int row, int column, DataTable data, DefaultTableModel model)
@@ -734,9 +736,14 @@ public class MainForm extends JFrame{
         viewData.InsertDataInTableModel(model);
     }
 
-    public void SetData(DataTable sdata, DataTable data)
+    public void SetCharacterData(CharactersTable sdata)
     {
-        data = sdata;
+        characterData = sdata;
+    }
+
+    public void SetTaskData(TaskTable sdata)
+    {
+        taskData = sdata;
     }
 
     public CharactersTable GetCharactersData()
@@ -753,6 +760,11 @@ public class MainForm extends JFrame{
     {
         return taskData;
     }
+    public TaskTable GetTaskViewData()
+    {
+        return viewTaskData;
+    }
+    public DefaultTableModel GetTaskModel() {return taskModel;}
 
     void ImportXML()
     {

@@ -58,7 +58,7 @@ public class XMLImporter extends  JFrame{
         NodeList Records = doc.getElementsByTagName("Character");
 
 
-        List<Character> dataList = new ArrayList<Character>();
+        List<Character> dataList = new ArrayList<>();
 
         for (int i = 0; i < Records.getLength(); i++)
         {

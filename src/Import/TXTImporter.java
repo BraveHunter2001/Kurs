@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class TXTImporter extends JFrame{
     static String fileNameOpen = null;
     static String separator = "\\|";
-    public TXTImporter(String str, MainForm form, DefaultTableModel model)
+    public TXTImporter(String str, MainForm form, ProgramMode programMode)
     {
         try {
             FileDialog open = new FileDialog(this, str, FileDialog.LOAD);
@@ -34,17 +34,31 @@ public class TXTImporter extends JFrame{
 
             BufferedReader reader = new BufferedReader(new FileReader(fileNameOpen));
 
-            List<Character> charcters = new ArrayList<Character>();
-            String line;
+            if (programMode == ProgramMode.Characters) {
+                List<Character> characters = new ArrayList<>();
+                String line;
 
-            while ((line = reader.readLine())!= null)
+                while ((line = reader.readLine()) != null) {
+                    String[] splitted = line.split(separator);
+                    if (splitted.length == CharacterColumns.values().length)
+                        characters.add(new Character(splitted));
+                }
+                form.SetCharacterData(new CharactersTable(characters));
+                form.GetCharactersData().InsertDataInTableModel(form.GetCharacterModel());
+            }else if (programMode == ProgramMode.Tasks)
             {
-                String[] splitted = line.split(separator);
-                if (splitted.length == CharacterColumns.values().length)
-                    charcters.add(new Character(splitted));
+                List<Task> tasks = new ArrayList<>();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    String[] splitted = line.split(separator);
+                    if (splitted.length == TasksColumns.values().length)
+                        tasks.add(new Task(splitted));
+                }
+                form.SetTaskData(new TaskTable(tasks));
+                form.GetTaskData().InsertDataInTableModel(form.GetTaskModel());
             }
-            form.SetData(new CharactersTable(charcters), form.GetCharactersData());
-            form.GetCharactersData().InsertDataInTableModel(model);
+
             reader.close();
         }catch (FileNotFoundException e)
         {
