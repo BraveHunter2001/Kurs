@@ -14,8 +14,6 @@ import java.util.List;
 
 public class Character extends Line {
 
-    List<Task> tasks;
-
     public Character() { super(); }
 
     public Character(Object[] ln) throws IllegalArgumentException
@@ -25,8 +23,7 @@ public class Character extends Line {
         if (ln.length != CharacterColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
         line = ln;
-        if ((List<Task>)ln[CharacterColumns.Tasks.GetId()] != null)
-            tasks = (List<Task>)ln[CharacterColumns.Tasks.GetId()];
+
     }
 
     public Character(String[] strs) throws IllegalArgumentException
@@ -45,7 +42,7 @@ public class Character extends Line {
         line[CharacterColumns.Apperance.GetId()] = strs[CharacterColumns.Apperance.GetId()];
         line[CharacterColumns.Location.GetId()] = strs[CharacterColumns.Location.GetId()];
         line[CharacterColumns.MeetingStatus.GetId()] = strs[CharacterColumns.MeetingStatus.GetId()];
-        tasks = Separate(strs[CharacterColumns.Tasks.GetId()]);
+
     }
 
 
@@ -53,14 +50,12 @@ public class Character extends Line {
     {
         if (line == null)
             line = new Object[6];
-        if (tasks == null)
-            tasks = new ArrayList<>();
         line[CharacterColumns.ID.GetId()] = ID;
         line[CharacterColumns.Name.GetId()] = Name;
         line[CharacterColumns.Apperance.GetId()] = Apperance;
         line[CharacterColumns.Location.GetId()] = Location;
         line[CharacterColumns.MeetingStatus.GetId()] = MeetingStatus;
-        line[CharacterColumns.Tasks.GetId()] = tasks;
+
     }
 
     public Character(Node nod)
@@ -75,7 +70,6 @@ public class Character extends Line {
         value[CharacterColumns.MeetingStatus.GetId()] = attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue();
 
 
-        value[CharacterColumns.Tasks.GetId()] = null;
         line = value;
     }
 
@@ -101,55 +95,6 @@ public class Character extends Line {
     String GetLocation()
     {
         return line[CharacterColumns.Location.GetId()].toString();
-    }
-
-    List<Task> GetTasks() {return tasks;}
-
-    public void SetTasks(List<Task> taks) {
-        tasks  = taks;
-        line[CharacterColumns.Tasks.GetId()] = tasks;
-    }
-
-    public void AddTask(Task ts){
-
-        for (int i = 0; i < tasks.size(); i++)
-            if (ts.GetID() == tasks.get(i).GetID())
-                return;
-
-        tasks.add(ts);
-        //ts.addCharacter(this);
-    }
-
-    public void RemoveTask (Task ts) {
-        for (int i = 0; i < tasks.size(); i++)
-            if (ts.GetID() == tasks.get(i).GetID())
-            {
-                tasks.remove(i);
-               // ts.removeCharacter(this);
-            }
-
-    }
-
-    public void RemoveAllTasks()
-    {
-        for(int i = 0; i < tasks.size(); i++)
-            RemoveTask(tasks.get(i));
-    }
-
-    public String getTaskString(){
-        String res ="";
-
-        if (tasks == null)
-            return res;
-        for (int i=0; i< tasks.size(); i++)
-        {
-            String temp = tasks.get(i).GetName();
-            if(i != tasks.size() - 1)
-                temp += ',';
-            res += temp;
-        }
-
-        return res;
     }
 
     String GetMeetingStatus()

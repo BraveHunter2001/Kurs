@@ -2,6 +2,7 @@ package Source;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 import Export.*;
 import Import.*;
@@ -57,11 +58,14 @@ public class MainForm extends JFrame{
 
     private DefaultTableModel currentModel;
 
-
     //panels
     private JPanel charactersPanel;
     private JPanel tasksPanel;
     private JPanel tablesPanel;
+
+    private JButton connectButton;
+
+    ConnectionTable connectionTable;
 
     CharactersTable data;
     CharactersTable viewData;
@@ -120,6 +124,7 @@ public class MainForm extends JFrame{
         loadButton = new JButton(new ImageIcon("./img/open.png"));
         addButton = new JButton(new ImageIcon("./img/add.png"));
         removeButton = new JButton(new ImageIcon("./img/remove.png"));
+        connectButton = new JButton("Connect");
 
         ModeLabel = new JLabel("Program mode:");
         modeParamBox = new JComboBox<ProgramMode>(ProgramMode.values());
@@ -128,6 +133,7 @@ public class MainForm extends JFrame{
         loadButton.setBorderPainted(false);
         addButton.setBorderPainted(false);
         removeButton.setBorderPainted(false);
+
 
         saveButton.setPreferredSize(new Dimension(32,32));
         loadButton.setPreferredSize(new Dimension(32,32));
@@ -140,6 +146,7 @@ public class MainForm extends JFrame{
         toolBar.add(removeButton);
         toolBar.add(ModeLabel);
         toolBar.add(modeParamBox);
+        toolBar.add(connectButton);
 
         toolBar.add(Box.createHorizontalStrut(5));
         toolBar.add(new JSeparator(SwingConstants.VERTICAL));
@@ -174,6 +181,8 @@ public class MainForm extends JFrame{
         charactersPanel = new JPanel();
 
         tasksPanel = new JPanel();
+
+        connectionTable = new ConnectionTable();
 
         // init table
         charaterModel = new DefaultTableModel(null, CharacterColumns.values())
@@ -223,6 +232,13 @@ public class MainForm extends JFrame{
                 NewTable();
             }
 
+        });
+
+        connectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ConnectChTsk();
+            }
         });
 
         addButton.addActionListener(new ActionListener() {
@@ -294,7 +310,6 @@ public class MainForm extends JFrame{
                 {
                     ShowTasks(row);
 
-
                 }
             }
         });
@@ -309,7 +324,6 @@ public class MainForm extends JFrame{
                 if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Tasks)
                 {
                     ShowCharacters(row);
-
                 }
             }
         });
@@ -388,8 +402,6 @@ public class MainForm extends JFrame{
         viewTaskData = taskData;
         viewTaskData.InsertDataInTableModel(taskModel);
 
-        charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-        taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
 
         setVisible(true);
     }
@@ -409,10 +421,7 @@ public class MainForm extends JFrame{
             taskData.InsertDataInTableModel(taskModel);
 
             currentModel = taskModel;
-
-            //charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-            if (taskTable.getColumnModel().getColumnCount() >3)
-                taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+            connectButton.setVisible(false);
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -425,10 +434,10 @@ public class MainForm extends JFrame{
             tablesPanel.add(tasksPanel);
             data.InsertDataInTableModel(charaterModel);
 
-            if (charactersTable.getColumnModel().getColumnCount() >5)
-                charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-            //taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+            connectButton.setVisible(false);
+
             setVisible(true);
+
             currentModel = charaterModel;
         } else if (modeParamBox.getSelectedItem() == ProgramMode.Both)
         {
@@ -442,10 +451,7 @@ public class MainForm extends JFrame{
             data.InsertDataInTableModel(charaterModel);
             taskData.InsertDataInTableModel(taskModel);
             currentModel = null;
-            if (charactersTable.getColumnModel().getColumnCount() >5)
-                charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-            if (taskTable.getColumnModel().getColumnCount() >3)
-                taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+            connectButton.setVisible(true);
             setVisible(true);
         }
 
@@ -533,22 +539,39 @@ public class MainForm extends JFrame{
 
     void ShowTasks(int row)
     {
-        Character ch = data.GetRowAt(row, charaterModel);
-        viewTaskData = new TaskTable(ch.GetTasks());
-        viewTaskData.InsertDataInTableModel(taskModel);
-        //charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-        if (taskTable.getColumnModel().getColumnCount() >3)
-            taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+       int idCharacter = (int)charaterModel.getValueAt(row, 0);
+       var hisTasks = connectionTable.GetTasksForCharacter(idCharacter);
+       viewTaskData = taskData.GetTaskTableById(hisTasks);
+       viewTaskData.InsertDataInTableModel(taskModel);
     }
 
     void ShowCharacters(int row)
     {
-        Task ts = taskData.GetRowAt(row, taskModel);
-        viewData = new CharactersTable(ts.GetCharaters());
-        viewData.InsertDataInTableModel(charaterModel);
-        if (charactersTable.getColumnModel().getColumnCount() >5)
-            charactersTable.removeColumn(charactersTable.getColumnModel().getColumn(CharacterColumns.Tasks.GetId()));
-        //taskTable.removeColumn(taskTable.getColumnModel().getColumn(TasksColumns.Characters.GetId()));
+
+    }
+
+    void ConnectChTsk()
+    {
+        int indexRowCharacter = charactersTable.getSelectedRow();
+        int indexRowTask = taskTable.getSelectedRow();
+
+        try {
+            if (indexRowCharacter < 0) {
+                throw new IndexOutOfBoundsException(indexRowCharacter);
+            } else if (indexRowTask < 0) {
+                throw new IndexOutOfBoundsException(indexRowTask);
+            }
+        }catch ( IndexOutOfBoundsException e)
+        {
+            JOptionPane.showMessageDialog(null, "Select the rows to connect!");
+        }
+
+        if (indexRowCharacter >= 0 && indexRowTask >= 0) {
+            int idCharacter = (int) charaterModel.getValueAt(indexRowCharacter, 0);
+            int idTask = (int) taskModel.getValueAt(indexRowTask, 0);
+
+            connectionTable.Connect(idCharacter, idTask);
+        }
     }
 
     void ExportXML()

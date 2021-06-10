@@ -51,7 +51,7 @@ public class TaskTable extends DataTable{
     {
         if (index >= TasksColumns.values().length || index < 0 )
             throw  new IndexOutOfBoundsException(index);
-        GetRowAt(index,model).RemoveAllCharacter();
+
         model.removeRow(index);
         rows.remove(index);
     }
@@ -150,22 +150,24 @@ public class TaskTable extends DataTable{
         return rows;
     }
 
-    public List<Task> ParseTask(String str)
+    public TaskTable GetTaskTableById(List<Integer> ids)
     {
-        if (str.equals("") || rows == null)
-            return null;
-        String[] splitted= str.split(",");
-
         List<Task> res = new ArrayList<>();
-
-        for (int i = 0; i< splitted.length; i++)
+        if (ids == null)
         {
-            for (int j =0; j < rows.size(); j++)
+            res = null;
+            return new TaskTable(res);
+        }
+
+        for (int i = 0; i < rows.size(); i++)
+        {
+            for (int j =0; j < ids.size(); j++)
             {
-                if (Integer.parseInt(splitted[i]) == rows.get(j).GetID())
-                        res.add(rows.get(j));
+                if (rows.get(i).GetID() == ids.get(j))
+                    res.add(rows.get(i));
             }
         }
-        return res;
+
+        return new TaskTable(res);
     }
 }

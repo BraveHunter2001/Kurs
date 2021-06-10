@@ -32,12 +32,13 @@ public class TXTExporter extends  JFrame
                 for (int i = 0; i < data.Rows().size(); i++)
                 {
                     var line = data.Rows().get(i).GetData();
-                    for(int j = 0; j < line.length-1; j++)
+                    for(int j = 0; j < line.length; j++)
                     {
                         writer.write(line[j].toString());
-                        writer.write("|");
+                        if(j != line.length -1 )
+                            writer.write("|");
                     }
-                    writer.write(data.Rows().get(i).getTaskString());
+
 
                     writer.write("\r\n");
                 }

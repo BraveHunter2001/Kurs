@@ -51,7 +51,7 @@ public class CharactersTable {
     {
         if (index >= CharacterColumns.values().length || index < 0 )
             throw  new IndexOutOfBoundsException(index);
-        GetRowAt(index,model).RemoveAllTasks();
+
         model.removeRow(index);
         rows.remove(index);
     }
