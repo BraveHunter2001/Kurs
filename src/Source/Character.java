@@ -67,12 +67,13 @@ public class Character implements Line {
         Object[] value = new Object[CharacterColumns.values().length];
         NamedNodeMap attrs = nod.getAttributes();
 
-        for (int i = 0; i < CharacterColumns.values().length - 2; i++)
+        for (int i = 0; i < CharacterColumns.values().length ; i++)
         {
-            value[i] = attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue();
+            if (i == CharacterColumns.ID.GetId())
+                value[i] = Integer.parseInt(attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue());
+            else
+                value[i] = attrs.getNamedItem(CharacterColumns.values()[i].toString()).getNodeValue();
         }
-        value[CharacterColumns.MeetingStatus.GetId()] = attrs.getNamedItem(CharacterColumns.values()[CharacterColumns.MeetingStatus.GetId()].toString()).getNodeValue();
-
 
         line = value;
     }
@@ -155,9 +156,9 @@ public class Character implements Line {
 
     public Node ApplyDataToXML(Node nod, Document doc)
     {
-        Element rec = doc.createElement("Character");
+        Element rec = doc.createElement("character");
         nod.appendChild(rec);
-        for (int i = 0; i < CharacterColumns.values().length - 1; i++)
+        for (int i = 0; i < CharacterColumns.values().length; i++)
         {
             String dat = (line[i]==null?"": line[i].toString());
             rec.setAttribute(CharacterColumns.values()[i].toString(),dat);

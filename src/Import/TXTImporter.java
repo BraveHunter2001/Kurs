@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class TXTImporter extends JFrame{
     static String fileNameOpen = null;
     static String separator = "\\|";
-    public TXTImporter(String str, MainForm form, ProgramMode programMode)
+    public TXTImporter(String str, MainForm form)
     {
         try {
             FileDialog open = new FileDialog(this, str, FileDialog.LOAD);
@@ -34,7 +34,7 @@ public class TXTImporter extends JFrame{
 
             BufferedReader reader = new BufferedReader(new FileReader(fileNameOpen));
 
-            if (programMode == ProgramMode.Characters) {
+            if (form.GetModeProgram() == ProgramMode.Characters) {
                 List<Character> characters = new ArrayList<>();
                 String line;
 
@@ -45,7 +45,8 @@ public class TXTImporter extends JFrame{
                 }
                 form.SetCharacterData(new CharactersTable(characters));
                 form.GetCharactersData().InsertDataInTableModel(form.GetCharacterModel());
-            }else if (programMode == ProgramMode.Tasks)
+
+            }else if (form.GetModeProgram() == ProgramMode.Tasks)
             {
                 List<Task> tasks = new ArrayList<>();
                 String line;

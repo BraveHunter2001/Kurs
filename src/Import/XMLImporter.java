@@ -47,7 +47,9 @@ public class XMLImporter extends  JFrame{
         Document doc = null;
         try
         {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder documentBuilder = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder();
             doc = documentBuilder.parse( new File(fullname));
             doc.getDocumentElement().normalize();
 
@@ -55,16 +57,28 @@ public class XMLImporter extends  JFrame{
             e.printStackTrace();
         }
 
-        NodeList Records = doc.getElementsByTagName("Character");
+        if (form.GetModeProgram() == ProgramMode.Characters) {
 
+            NodeList Records = doc.getElementsByTagName("character");
 
-        List<Character> dataList = new ArrayList<>();
+            List<Character> dataList = new ArrayList<>();
 
-        for (int i = 0; i < Records.getLength(); i++)
+            for (int i = 0; i < Records.getLength(); i++) {
+                dataList.add(new Character(Records.item(i)));
+            }
+            form.ApplyDataCharacter(new CharactersTable(dataList));
+
+        } else if (form.GetModeProgram() == ProgramMode.Tasks)
         {
-            dataList.add( new Character(Records.item(i)));
+            NodeList Records = doc.getElementsByTagName("Task");
+
+            List<Task> dataList = new ArrayList<>();
+
+            for (int i = 0; i < Records.getLength(); i++) {
+                dataList.add(new Task(Records.item(i)));
+            }
+            form.ApplyDataTask(new TaskTable(dataList));
         }
-        form.ApplyData(new CharactersTable(dataList),form.GetCharactersData(), form.GetCharactersViewData(), form.GetCharacterModel());
     }
 
 

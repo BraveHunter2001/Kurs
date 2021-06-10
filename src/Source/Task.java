@@ -64,7 +64,10 @@ public class Task implements Line{
 
         for (int i = 0; i < TasksColumns.values().length; i++)
         {
-            value[i] = attrs.getNamedItem(TasksColumns.values()[i].toString()).getNodeValue();
+            if (i == TasksColumns.ID.GetId())
+                value[i] = Integer.parseInt(attrs.getNamedItem(TasksColumns.values()[i].toString()).getNodeValue());
+            else
+                value[i] = attrs.getNamedItem(TasksColumns.values()[i].toString()).getNodeValue();
         }
 
         line = value;

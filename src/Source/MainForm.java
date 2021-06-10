@@ -399,9 +399,9 @@ public class MainForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
-                    ExportXML(viewCharacterData);
+                    ExportXML(characterData);
                 if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
-                    ExportXML(viewTaskData);
+                    ExportXML(taskData);
             }
         });
 
@@ -664,7 +664,7 @@ public class MainForm extends JFrame{
 
     void Load()
     {
-        new TXTImporter("Load table",this,  (ProgramMode) modeParamBox.getSelectedItem());
+        new TXTImporter("Load table",this);
         viewCharacterData = characterData;
         viewTaskData = taskData;
         Sort(viewCharacterData,sortCharacterParamBox,charaterModel);
@@ -758,10 +758,16 @@ public class MainForm extends JFrame{
         }
     }
 
-    public void ApplyData(DataTable thisData, DataTable data, DataTable viewData, DefaultTableModel model)
+    public void ApplyDataCharacter(DataTable thisData)
     {
-        viewData = data = thisData;
-        viewData.InsertDataInTableModel(model);
+        viewCharacterData = characterData = (CharactersTable)thisData;
+        viewCharacterData.InsertDataInTableModel(charaterModel);
+    }
+
+    public void ApplyDataTask(DataTable thisData)
+    {
+        viewTaskData = taskData = (TaskTable)thisData;
+        viewTaskData.InsertDataInTableModel(taskModel);
     }
 
     public void SetCharacterData(CharactersTable sdata)
@@ -793,6 +799,8 @@ public class MainForm extends JFrame{
         return viewTaskData;
     }
     public DefaultTableModel GetTaskModel() {return taskModel;}
+
+    public ProgramMode GetModeProgram () {return (ProgramMode) modeParamBox.getSelectedItem();}
 
     void ImportXML()
     {
