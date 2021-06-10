@@ -6,7 +6,8 @@ import Source.CharactersTable;
 import org.w3c.dom.Document;
 //import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
+import Source.DataTable;
+import Source.Line;
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,7 +29,7 @@ public class XMLExporter extends JFrame
      * @param data
      * @throws ParserConfigurationException
      */
-    public XMLExporter(CharactersTable data) throws ParserConfigurationException
+    public XMLExporter(DataTable data) throws ParserConfigurationException
     {
         FileDialog fileDialog = new FileDialog(this, "Export XML", FileDialog.SAVE);
         fileDialog.setFile("*.xml");
@@ -47,11 +48,12 @@ public class XMLExporter extends JFrame
                 throw e;
             }
 
-            Node recList = document.createElement("CharacterList");
+            Node recList = document.createElement("dataList");
             document.appendChild(recList);
             for (int i = 0; i < data.Rows().size(); i++)
             {
-                data.Rows().get(i).ApplyDataToXML(recList, document);
+                Line line = (Line)data.Rows().get(i);
+                line.ApplyDataToXML(recList, document);
             }
 
             try

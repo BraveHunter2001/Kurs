@@ -103,10 +103,10 @@ public class MainForm extends JFrame{
         fileMenu.add(newMenuItem);
         fileMenu.add(openMenuItem);
         fileMenu.add(saveMenuItem);
-        fileMenu.addSeparator();
+
         fileMenu.add(exportXMLMenuItem);
         fileMenu.add(importXMLMenuItem);
-        fileMenu.addSeparator();
+
         fileMenu.add(new JLabel("Report"));
         fileMenu.add(exportPDFMenuItem);
         fileMenu.add(exportHTMLMenuItem);
@@ -398,7 +398,10 @@ public class MainForm extends JFrame{
         exportXMLMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExportXML();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    ExportXML(viewCharacterData);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    ExportXML(viewTaskData);
             }
         });
 
@@ -458,6 +461,12 @@ public class MainForm extends JFrame{
         loadButton.setVisible(false);
         saveButton.setVisible(false);
 
+        openMenuItem.setVisible(false);
+        saveMenuItem.setVisible(false);
+
+        exportXMLMenuItem.setVisible(false);
+        importXMLMenuItem.setVisible(false);
+
         setVisible(true);
     }
 
@@ -495,6 +504,13 @@ public class MainForm extends JFrame{
             loadButton.setVisible(true);
             saveButton.setVisible(true);
 
+            openMenuItem.setVisible(true);
+            saveMenuItem.setVisible(true);
+
+
+            exportXMLMenuItem.setVisible(true);
+            importXMLMenuItem.setVisible(true);
+
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -525,6 +541,12 @@ public class MainForm extends JFrame{
 
             loadButton.setVisible(true);
             saveButton.setVisible(true);
+
+            openMenuItem.setVisible(true);
+            saveMenuItem.setVisible(true);
+
+            exportXMLMenuItem.setVisible(true);
+            importXMLMenuItem.setVisible(true);
 
             setVisible(true);
 
@@ -560,6 +582,12 @@ public class MainForm extends JFrame{
 
             loadButton.setVisible(false);
             saveButton.setVisible(false);
+
+            openMenuItem.setVisible(false);
+            saveMenuItem.setVisible(false);
+
+            exportXMLMenuItem.setVisible(false);
+            importXMLMenuItem.setVisible(false);
 
             setVisible(true);
         }
@@ -721,10 +749,10 @@ public class MainForm extends JFrame{
         }
     }
 
-    void ExportXML()
+    void ExportXML(DataTable data)
     {
         try {
-            new XMLExporter(characterData);
+            new XMLExporter(data);
         }catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
