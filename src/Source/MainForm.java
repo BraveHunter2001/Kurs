@@ -415,14 +415,20 @@ public class MainForm extends JFrame{
         exportPDFMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExportPDF();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    ExportPDF(characterData);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    ExportPDF(taskData);
             }
         });
 
         exportHTMLMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExportHTML();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    ExportHTML(characterData);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    ExportHTML(taskData);
             }
         });
 
@@ -816,12 +822,12 @@ public class MainForm extends JFrame{
         new XMLImporter(this);
     }
 
-    void ExportPDF()
+    void ExportPDF(DataTable data)
     {
-        new PDFExporter(characterData);
+        new PDFExporter(data);
     }
-    void ExportHTML()
+    void ExportHTML(DataTable data)
     {
-        new HTMLExporter(characterData);
+        new HTMLExporter(data);
     }
 }

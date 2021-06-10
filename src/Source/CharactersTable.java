@@ -67,7 +67,10 @@ public class CharactersTable implements DataTable {
         rows.remove(index);
     }
 
-
+    public CharacterColumns[] GetColumns()
+    {
+        return CharacterColumns.values();
+    }
     private Character GetRowAt(int row, DefaultTableModel model)
     {
         Object[] result = new Object[model.getColumnCount()];

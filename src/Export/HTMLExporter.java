@@ -18,7 +18,7 @@ public class HTMLExporter extends JFrame {
      * Constructor create html report from data
      * @param data - reported
      */
-    public HTMLExporter(CharactersTable data)
+    public HTMLExporter(DataTable data)
     {
         FileDialog fd = new FileDialog(this, "Export HTML", FileDialog.SAVE);
         fd.setFile("*.html");
@@ -39,15 +39,19 @@ public class HTMLExporter extends JFrame {
             pw.println("<style type=\"text/css\">table { width: 70%; border: 4px solid black;border-collapse: collapse;text-align: center;margin: auto;}th { background: #ccc;padding: 5px;border: 1px solid black; }td { padding: 5px; border: 1px solid black;}</style></head>");
             pw.println("<body><table>");
             pw.println("<tr>");
-            for (int i = 0; i < CharacterColumns.values().length; i++)
+
+
+            for (int i = 0; i < data.GetColumns().length; i++)
             {
-                pw.println("<th>"+ CharacterColumns.values()[i].toString()+"</th>");
+                pw.println("<th>"+ data.GetColumns()[i].toString()+"</th>");
             }
+
             pw.println("</tr>");
 
             for (int i = 0; i < data.Rows().size(); i++)
             {
-                pw.println(data.Rows().get(i).GetHTMLTable());
+                Line line = (Line)data.Rows().get(i);
+                pw.println(line.GetHTMLTable());
             }
             pw.println(" </table>" + "</body>" +"</html>");
             pw.close();

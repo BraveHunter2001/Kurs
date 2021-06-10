@@ -78,6 +78,7 @@ public class Character implements Line {
         line = value;
     }
 
+
     String GetApperance()
     {
         return line[CharacterColumns.Apperance.GetId()].toString();

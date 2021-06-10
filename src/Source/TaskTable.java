@@ -158,6 +158,11 @@ public class TaskTable implements DataTable {
         return rows;
     }
 
+    public TasksColumns[] GetColumns()
+    {
+        return TasksColumns.values();
+    }
+
     @Override
     public Task GetDefault() {
         return DefaultTask;

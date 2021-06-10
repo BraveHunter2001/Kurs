@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 public class PDFExporter extends JFrame {
     public static final Logger logger = Logger.getLogger(PDFExporter.class);
 
-    public PDFExporter(CharactersTable data) {
+    public PDFExporter(DataTable data) {
         FileDialog fileDialog = new FileDialog(this, "Export PDF", FileDialog.SAVE);
         fileDialog.setFile("*.pdf");
         fileDialog.setVisible(true);
@@ -33,7 +33,7 @@ public class PDFExporter extends JFrame {
 
         if (fullnamefile != null && fullnamefile != "nullnull") {
             Document document = new Document(PageSize.A4, 5, 5, 50, 50);
-            PdfPTable pdfTable = new PdfPTable(CharacterColumns.values().length);
+            PdfPTable pdfTable = new PdfPTable(data.GetColumns().length);
 
             try{
                 PdfWriter.getInstance(document, new FileOutputStream(fullnamefile));
@@ -58,14 +58,15 @@ public class PDFExporter extends JFrame {
             Font font = new Font(bf, 11);
             Font fontBold = new Font(bfBold, 11);
 
-            for (int i = 0; i < CharacterColumns.values().length; i++)
+            for (int i = 0; i < data.GetColumns().length; i++)
             {
-                pdfTable.addCell(new PdfPCell(new Phrase(CharacterColumns.values()[i].toString(),fontBold)));
+                pdfTable.addCell(new PdfPCell(new Phrase(data.GetColumns()[i].toString(),fontBold)));
             }
 
             for (int i =0; i < data.Rows().size(); i++)
             {
-                data.Rows().get(i).ApplyDataToPdfTable(pdfTable, font);
+                Line line = (Line)data.Rows().get(i);
+                line.ApplyDataToPdfTable(pdfTable, font);
             }
 
             document.open();

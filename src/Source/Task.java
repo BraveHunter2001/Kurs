@@ -73,6 +73,7 @@ public class Task implements Line{
         line = value;
     }
 
+
     String GetTaskStatus()
     {
         return (String) line[TasksColumns.TaskStatus.GetId()];
@@ -145,7 +146,7 @@ public class Task implements Line{
     public void ApplyDataToPdfTable(PdfPTable pdfPTable, Font font) {
         for(int i = 0; i < TasksColumns.values().length; i++)
         {
-            String dat  = (line[i] == null ?"": line[i].toString());
+            String dat  = (line[i] == null ? "": line[i].toString());
             pdfPTable.addCell(new Phrase(dat, font));
         }
     }
