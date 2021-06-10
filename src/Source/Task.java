@@ -22,9 +22,11 @@ public class Task extends Line{
             throw new IllegalArgumentException("argument was null or empty!");
         if (ln.length != TasksColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
+
+        if (line == null)
+            line = new Object[3];
+
         line = ln;
-
-
     }
 
     public Task(int ID, String Name, String TaskStatus)
@@ -60,56 +62,18 @@ public class Task extends Line{
         Object[] value = new Object[TasksColumns.values().length];
         NamedNodeMap attrs = nod.getAttributes();
 
-        for (int i = 0; i < TasksColumns.values().length - 2; i++)
+        for (int i = 0; i < TasksColumns.values().length; i++)
         {
             value[i] = attrs.getNamedItem(TasksColumns.values()[i].toString()).getNodeValue();
         }
 
-        value[TasksColumns.TaskStatus.GetId()] = attrs.getNamedItem(TasksColumns.values()[TasksColumns.TaskStatus.GetId()].toString()).getNodeValue();
         line = value;
     }
 
-    void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException
-    {
-        if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
-            throw new IndexOutOfBoundsException(columnIndex);
-
-            line[columnIndex] = value;
-    }
-
-    public int GetID()
-    {
-        return Integer.parseInt(line[0].toString());
-    }
-
-    String GetName()
-    {
-        return line[TasksColumns.Name.GetId()].toString();
-    }
 
     String GetTaskStatus()
     {
         return (String) line[TasksColumns.TaskStatus.GetId()];
-    }
-
-
-
-    boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
-    {
-
-        if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
-            throw new IndexOutOfBoundsException(columnIndex);
-
-
-        if(line[columnIndex] == null && value == null)
-            return true;
-        {
-            if(line[columnIndex] == null && value != null || line[columnIndex] != null && value == null)
-                return false;
-            if (line[columnIndex].toString().equals(value))
-                return true;
-        }
-        return false;
     }
 
     public Node ApplyDataToXML(Node nod, Document doc)
@@ -124,24 +88,5 @@ public class Task extends Line{
         return nod;
     }
 
-    public void ApplyDataToPdfTable(PdfPTable pdfPTable, Font font)
-    {
-        for(int i = 0; i < line.length; i++)
-        {
-            String dat  = (line[i] == null ?"": line[i].toString());
-            pdfPTable.addCell(new Phrase(dat, font));
-        }
-    }
 
-    public String GetHTMLTable()
-    {
-        String res = "<tr>";
-        for (int i =0 ; i < line.length; i++)
-        {
-            String dat  = (line[i] == null ?"": line[i].toString());
-            res+= "<td>" + dat +"</td>";
-        }
-        res += "</tr>";
-        return res;
-    }
 }

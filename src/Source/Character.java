@@ -22,8 +22,11 @@ public class Character extends Line {
             throw new IllegalArgumentException("argument was null or empty!");
         if (ln.length != CharacterColumns.values().length)
             throw new IllegalArgumentException("array length doesn't match column count!");
-        line = ln;
 
+        if (line == null)
+            line = new Object[5];
+
+        line = ln;
     }
 
     public Character(String[] strs) throws IllegalArgumentException
@@ -73,19 +76,6 @@ public class Character extends Line {
         line = value;
     }
 
-    void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException
-    {
-        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
-            throw new IndexOutOfBoundsException(columnIndex);
-
-            line[columnIndex] = value;
-    }
-
-
-    String GetName()
-    {
-        return line[CharacterColumns.Name.GetId()].toString();
-    }
 
     String GetApperance()
     {
@@ -102,23 +92,6 @@ public class Character extends Line {
         return (String) line[CharacterColumns.MeetingStatus.GetId()];
     }
 
-    boolean isEqual (int columnIndex, String value) throws IndexOutOfBoundsException
-    {
-
-        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
-            throw new IndexOutOfBoundsException(columnIndex);
-
-
-        if(line[columnIndex] == null && value == null)
-            return true;
-        {
-            if(line[columnIndex] == null && value != null || line[columnIndex] != null && value == null)
-                return false;
-            if (line[columnIndex].toString().equals(value))
-                return true;
-        }
-        return false;
-    }
 
     public Node ApplyDataToXML(Node nod, Document doc)
     {
@@ -133,38 +106,4 @@ public class Character extends Line {
         return nod;
     }
 
-    public void ApplyDataToPdfTable(PdfPTable pdfPTable, Font font)
-    {
-        for(int i = 0; i < line.length; i++)
-        {
-            String dat  = (line[i] == null ?"": line[i].toString());
-            pdfPTable.addCell(new Phrase(dat, font));
-        }
-    }
-
-    public String GetHTMLTable()
-    {
-        String res = "<tr>";
-        for (int i =0 ; i < line.length; i++)
-        {
-            String dat  = (line[i] == null ?"": line[i].toString());
-            res+= "<td>" + dat +"</td>";
-        }
-        res += "</tr>";
-        return res;
-    }
-
-    private List<Task> Separate(String sep)
-    {
-        List<Task> res = new ArrayList<>();
-
-        String[] splitted = sep.split(":");
-        for(int i = 0; i < splitted.length; i++)
-        {
-                String[] temp = splitted[i].split(",");
-                res.add(new Task(temp));
-        }
-
-        return res;
-    }
 }
