@@ -294,7 +294,7 @@ public class MainForm extends JFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED)
-                    Sort();
+                    SortCharacter();
             }
         });
 
@@ -437,6 +437,9 @@ public class MainForm extends JFrame{
         addButton.setVisible(false);
         removeButton.setVisible(false);
 
+        loadButton.setVisible(false);
+        saveButton.setVisible(false);
+
         setVisible(true);
     }
 
@@ -471,6 +474,9 @@ public class MainForm extends JFrame{
             addButton.setVisible(true);
             removeButton.setVisible(true);
 
+            loadButton.setVisible(true);
+            saveButton.setVisible(true);
+
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -498,6 +504,9 @@ public class MainForm extends JFrame{
 
             addButton.setVisible(true);
             removeButton.setVisible(true);
+
+            loadButton.setVisible(true);
+            saveButton.setVisible(true);
 
             setVisible(true);
 
@@ -530,6 +539,9 @@ public class MainForm extends JFrame{
 
             addButton.setVisible(false);
             removeButton.setVisible(false);
+
+            loadButton.setVisible(false);
+            saveButton.setVisible(false);
 
             setVisible(true);
         }
@@ -580,20 +592,29 @@ public class MainForm extends JFrame{
     {
         String text = searchField.getText();
 
-        if(text == null || text.equals(""))
+        if (modeParamBox.getSelectedItem() == ProgramMode.Characters) {
+            if (text == null || text.equals("")) {
+                viewCharacterData = characterData;
+                viewCharacterData.InsertDataInTableModel(charaterModel);
+            } else {
+                viewCharacterData = characterData.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
+                viewCharacterData.InsertDataInTableModel(charaterModel);
+            }
+        }else if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
         {
-            viewCharacterData = characterData;
-            viewCharacterData.InsertDataInTableModel(charaterModel);
+            if (text == null || text.equals("")) {
+                viewTaskData = taskData;
+                viewTaskData.InsertDataInTableModel(taskModel);
+            } else {
+                viewTaskData = taskData.Search(searchTaskParamBox.getSelectedIndex(), searchField.getText());
+                viewTaskData.InsertDataInTableModel(taskModel);
+            }
         }
-        else
-        {
-            viewCharacterData = characterData.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
-            viewCharacterData.InsertDataInTableModel(charaterModel);
-        }
-
     }
 
-    void Sort()
+
+
+    void SortCharacter()
     {
         viewCharacterData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
 
@@ -617,7 +638,7 @@ public class MainForm extends JFrame{
     {
         new TXTImporter("Load table",this, charaterModel);
         viewCharacterData = characterData;
-        Sort();
+        SortCharacter();
     }
 
     void ChangeCharaterRow(int row, int column)
