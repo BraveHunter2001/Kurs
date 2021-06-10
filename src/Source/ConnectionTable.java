@@ -6,6 +6,7 @@ import java.util.List;
 public class ConnectionTable {
     List<int[]> connectionList;
 
+
     public ConnectionTable()
     {
         connectionList = new ArrayList<>();
@@ -40,24 +41,17 @@ public class ConnectionTable {
 
     }
 
-    public void UnConnectAllForCharacter(int id)
+    public void UnConnectAllForItem(int id, List<Integer> idsItems)
     {
-        var hisTasks = this.GetTasksForCharacter(id);
 
-        if (hisTasks != null)
-            for (var task: hisTasks)
-                this.UnConnect(id,task);
-    }
-    public void UnConnectAllForTask(int id)
-    {
-        var hisCharacter = this.GetCharactersForTask(id);
-
-        if (hisCharacter != null)
-            for (var chr: hisCharacter)
-                this.UnConnect(id,chr);
+        if (idsItems != null)
+            for (var item: idsItems)
+                this.UnConnect(id,item);
     }
 
-    public List<Integer> GetTasksForCharacter(int idCharacter)
+
+
+    public List<Integer> GetTasksFromCharacter(int idCharacter)
     {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < connectionList.size(); i++)
@@ -70,7 +64,7 @@ public class ConnectionTable {
         return res;
     }
 
-    public List<Integer> GetCharactersForTask(int idTask)
+    public List<Integer> GetCharactersFromTask(int idTask)
     {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < connectionList.size(); i++)

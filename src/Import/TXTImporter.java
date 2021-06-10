@@ -43,8 +43,8 @@ public class TXTImporter extends JFrame{
                 if (splitted.length == CharacterColumns.values().length)
                     charcters.add(new Character(splitted));
             }
-            form.SetData(new CharactersTable(charcters));
-            form.GetData().InsertDataInTableModel(model);
+            form.SetData(new CharactersTable(charcters), form.GetCharactersData());
+            form.GetCharactersData().InsertDataInTableModel(model);
             reader.close();
         }catch (FileNotFoundException e)
         {

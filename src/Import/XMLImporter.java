@@ -64,7 +64,7 @@ public class XMLImporter extends  JFrame{
         {
             dataList.add( new Character(Records.item(i)));
         }
-        form.ApplyData(new CharactersTable(dataList));
+        form.ApplyData(new CharactersTable(dataList),form.GetCharactersData(), form.GetCharactersViewData(), form.GetCharacterModel());
     }
 
 

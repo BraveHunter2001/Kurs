@@ -2,6 +2,7 @@ package Source;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 import Export.*;
 import Import.*;
@@ -56,7 +57,7 @@ public class MainForm extends JFrame{
     private JTable taskTable;
     private JScrollPane taskScroll;
 
-    private DefaultTableModel currentModel;
+
 
     //panels
     private JPanel charactersPanel;
@@ -260,9 +261,9 @@ public class MainForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
-                    AddCharacterRow();
+                    AddRow(charaterModel,characterData);
                 if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
-                    AddTaskRow();
+                    AddRow(taskModel, taskData);
             }
         });
 
@@ -270,9 +271,9 @@ public class MainForm extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
-                    DeleteCharacterRow();
+                    DeleteRow(characterData, charactersTable,charaterModel);
                 if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
-                    DeleteTaskRow();
+                    DeleteRow(taskData, taskTable,taskModel);
             }
         });
 
@@ -286,7 +287,10 @@ public class MainForm extends JFrame{
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Search();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    Search(characterData,viewCharacterData,charaterModel,searchCharacterParamBox);
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    Search(taskData,viewTaskData,taskModel,searchTaskParamBox);
             }
         });
 
@@ -294,7 +298,7 @@ public class MainForm extends JFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED)
-                    SortCharacter();
+                    Sort(viewCharacterData,sortCharacterParamBox,charaterModel);
             }
         });
 
@@ -302,7 +306,7 @@ public class MainForm extends JFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED)
-                    SortTask();
+                    Sort(viewTaskData,sortTaskParamBox,taskModel);
             }
         });
 
@@ -317,14 +321,14 @@ public class MainForm extends JFrame{
         charaterModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                ChangeCharaterRow(e.getFirstRow(), e.getColumn());
+                ChangeRow(e.getFirstRow(), e.getColumn(),characterData,charaterModel);
             }
         });
 
         taskModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                ChangeTaskRow(e.getFirstRow(), e.getColumn());
+                ChangeRow(e.getFirstRow(), e.getColumn(),taskData,taskModel);
             }
         });
 
@@ -337,7 +341,7 @@ public class MainForm extends JFrame{
                 int row = table.rowAtPoint(point);
                 if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Characters)
                 {
-                    ShowTasks(row);
+                    ShowConnectionItems(row,taskData, charaterModel, taskModel);
 
                 }
             }
@@ -352,7 +356,7 @@ public class MainForm extends JFrame{
                 int row = table.rowAtPoint(point);
                 if (e.getClickCount() == 1 && table.getSelectedRow() != -1 && modeParamBox.getSelectedItem() == ProgramMode.Tasks)
                 {
-                    ShowCharacters(row);
+                    ShowConnectionItems(row,characterData, taskModel, charaterModel);
                 }
             }
         });
@@ -465,7 +469,7 @@ public class MainForm extends JFrame{
 
             taskData.InsertDataInTableModel(taskModel);
 
-            currentModel = taskModel;
+
             connectButton.setVisible(false);
             unConnectionButton.setVisible(false);
 
@@ -518,7 +522,7 @@ public class MainForm extends JFrame{
 
             setVisible(true);
 
-            currentModel = charaterModel;
+
         } else if (modeParamBox.getSelectedItem() == ProgramMode.Both)
         {
             setVisible(false);
@@ -530,7 +534,7 @@ public class MainForm extends JFrame{
 
             characterData.InsertDataInTableModel(charaterModel);
             taskData.InsertDataInTableModel(taskModel);
-            currentModel = null;
+
 
             connectButton.setVisible(true);
             unConnectionButton.setVisible(true);
@@ -556,23 +560,30 @@ public class MainForm extends JFrame{
 
     }
 
-    void AddCharacterRow()
+    void AddRow(DefaultTableModel model, DataTable data)
     {
-        charaterModel.addRow(characterData.AddRow(CharactersTable.DefaultCharacter.GetData()));;
-    }
-    void AddTaskRow()
-    {
-        taskModel.addRow(taskData.AddRow(TaskTable.DefaultTask.GetData()));;
+        model.addRow(data.AddRow(data.GetDefault().GetData()));
     }
 
-    void DeleteCharacterRow()
+
+    void DeleteRow(DataTable data,JTable table,  DefaultTableModel model)
     {
         try {
-            int indexRowCharacter = charactersTable.getSelectedRow();
-            int idCharacter = (int) charaterModel.getValueAt(indexRowCharacter, 0);
+            int indexRow = table.getSelectedRow();
+            int id = (int) model.getValueAt(indexRow, 0);
 
-            connectionTable.UnConnectAllForCharacter(idCharacter);
-            characterData.RemoveRow(indexRowCharacter, charaterModel);
+            List<Integer> idsItems;
+
+            if (data.getClass().getSimpleName().equals("CharactersTable"))
+                idsItems = connectionTable.GetTasksFromCharacter(id);
+            else if (data.getClass().getSimpleName().equals("TaskTable"))
+                idsItems = connectionTable.GetCharactersFromTask(id);
+            else
+                idsItems = null;
+
+            connectionTable.UnConnectAllForItem(id, idsItems);
+            data.RemoveRow(indexRow, model);
+
         } catch ( IndexOutOfBoundsException e)
         {
             JOptionPane.showMessageDialog(null, "Select the row to delete!");
@@ -580,57 +591,28 @@ public class MainForm extends JFrame{
 
     }
 
-    void DeleteTaskRow()
-    {
-        try {
-            int indexRowTask = taskTable.getSelectedRow();
-            int idTask = (int) taskModel.getValueAt(indexRowTask, 0);
 
-            connectionTable.UnConnectAllForTask(idTask);
-
-            taskData.RemoveRow(indexRowTask, taskModel);
-        } catch ( IndexOutOfBoundsException e)
-        {
-            JOptionPane.showMessageDialog(null, "Select the row to delete!");
-        }
-
-    }
-
-    void Search()
+    void Search(DataTable data, DataTable viewData, DefaultTableModel model, JComboBox paramBox)
     {
         String text = searchField.getText();
 
-        if (modeParamBox.getSelectedItem() == ProgramMode.Characters) {
             if (text == null || text.equals("")) {
-                viewCharacterData = characterData;
-                viewCharacterData.InsertDataInTableModel(charaterModel);
+                viewData = data;
+                viewData.InsertDataInTableModel(model);
             } else {
-                viewCharacterData = characterData.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
-                viewCharacterData.InsertDataInTableModel(charaterModel);
+                viewData = data.Search(paramBox.getSelectedIndex(), searchField.getText());
+                viewData.InsertDataInTableModel(model);
             }
-        }else if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
-        {
-            if (text == null || text.equals("")) {
-                viewTaskData = taskData;
-                viewTaskData.InsertDataInTableModel(taskModel);
-            } else {
-                viewTaskData = taskData.Search(searchTaskParamBox.getSelectedIndex(), searchField.getText());
-                viewTaskData.InsertDataInTableModel(taskModel);
-            }
-        }
+
     }
 
 
 
-    void SortCharacter()
+    void Sort(DataTable viewdata,JComboBox combo,DefaultTableModel model)
     {
-        viewCharacterData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
+        viewdata.Sort(combo.getSelectedIndex()).InsertDataInTableModel(model);
     }
 
-    void SortTask()
-    {
-        viewTaskData.Sort(sortTaskParamBox.getSelectedIndex()).InsertDataInTableModel(taskModel);
-    }
 
     void NewTable()
     {
@@ -650,46 +632,38 @@ public class MainForm extends JFrame{
     {
         new TXTImporter("Load table",this, charaterModel);
         viewCharacterData = characterData;
-        SortCharacter();
+        //SortCharacter();
     }
 
-    void ChangeCharaterRow(int row, int column)
+    void ChangeRow(int row, int column, DataTable data, DefaultTableModel model)
     {
         if(row >= 0 && column >= 0)
         {
-            Object newValue = charaterModel.getValueAt(row, column);
-            int id = Integer.parseInt(charaterModel.getValueAt(row, 0).toString());
-             characterData.ChangeRow(id, column, newValue);
+            Object newValue = model.getValueAt(row, column);
+            int id = Integer.parseInt(model.getValueAt(row, 0).toString());
+             data.ChangeRow(id, column, newValue);
 
         }
     }
 
-    void ChangeTaskRow(int row, int column)
-    {
-        if(row >= 0 && column >= 0)
-        {
-            Object newValue = taskModel.getValueAt(row, column);
-            int id = Integer.parseInt(taskModel.getValueAt(row, 0).toString());
-            taskData.ChangeRow(id, column, newValue);
 
-        }
+    void ShowConnectionItems(int row, DataTable data, DefaultTableModel model, DefaultTableModel modelOther)
+    {
+       int id = (int)model.getValueAt(row, 0);
+
+        List<Integer> idsItems;
+
+        if (data.getClass().getSimpleName().equals("TaskTable"))
+            idsItems = connectionTable.GetTasksFromCharacter(id);
+        else if (data.getClass().getSimpleName().equals("CharactersTable"))
+            idsItems = connectionTable.GetCharactersFromTask(id);
+        else
+            idsItems = null;
+
+        DataTable viewdata = data.GetConnectionItemById(idsItems);
+        viewdata.InsertDataInTableModel(modelOther);
     }
 
-    void ShowTasks(int row)
-    {
-       int idCharacter = (int)charaterModel.getValueAt(row, 0);
-       var hisTasks = connectionTable.GetTasksForCharacter(idCharacter);
-       viewTaskData = taskData.GetConnectionItemById(hisTasks);
-       viewTaskData.InsertDataInTableModel(taskModel);
-    }
-
-    void ShowCharacters(int row)
-    {
-        int idTask = (int)taskModel.getValueAt(row, 0);
-        var hisCharacter = connectionTable.GetCharactersForTask(idTask);
-        viewCharacterData = characterData.GetConnectionItemById(hisCharacter);
-        viewCharacterData.InsertDataInTableModel(charaterModel);
-    }
 
     void ConnectChTsk()
     {
@@ -748,20 +722,30 @@ public class MainForm extends JFrame{
         }
     }
 
-    public void ApplyData(CharactersTable dat)
+    public void ApplyData(DataTable thisData, DataTable data, DataTable viewData, DefaultTableModel model)
     {
-        viewCharacterData = characterData = dat;
-        viewCharacterData.InsertDataInTableModel(charaterModel);
+        viewData = data = thisData;
+        viewData.InsertDataInTableModel(model);
     }
 
-    public void SetData(CharactersTable sdata)
+    public void SetData(DataTable sdata, DataTable data)
     {
-        characterData = sdata;
+        data = sdata;
     }
 
-    public CharactersTable GetData()
+    public CharactersTable GetCharactersData()
     {
         return characterData;
+    }
+    public CharactersTable GetCharactersViewData()
+    {
+        return viewCharacterData;
+    }
+    public DefaultTableModel GetCharacterModel() {return charaterModel;}
+
+    public TaskTable GetTaskData()
+    {
+        return taskData;
     }
 
     void ImportXML()

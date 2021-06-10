@@ -159,6 +159,11 @@ public class CharactersTable implements DataTable {
         return rows;
     }
 
+    @Override
+    public Character GetDefault() {
+        return DefaultCharacter;
+    }
+
     public CharactersTable GetConnectionItemById(List<Integer> ids)
     {
         List<Character> res = new ArrayList<>();

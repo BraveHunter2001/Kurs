@@ -19,6 +19,8 @@ public interface DataTable {
 
     public abstract List Rows();
 
+    public abstract Line GetDefault();
+
     private void ClearTable(DefaultTableModel model) { }
 
     public abstract void InsertDataInTableModel (DefaultTableModel model);

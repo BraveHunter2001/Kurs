@@ -158,6 +158,11 @@ public class TaskTable implements DataTable {
         return rows;
     }
 
+    @Override
+    public Task GetDefault() {
+        return DefaultTask;
+    }
+
     public TaskTable GetConnectionItemById(List<Integer> ids)
     {
         List<Task> res = new ArrayList<>();
