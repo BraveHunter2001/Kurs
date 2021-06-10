@@ -8,11 +8,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Task implements Line{
-
+    private static String[] DBcolumns = {"id", "name", "taskstatus"};
 
     Object[] line;
     public Task() { super(); }
@@ -26,7 +27,7 @@ public class Task implements Line{
 
         if (line == null)
             line = new Object[3];
-
+        CorrectDataTypes();
         line = ln;
     }
 
@@ -73,11 +74,17 @@ public class Task implements Line{
         line = value;
     }
 
-
-    String GetTaskStatus()
+    private void CorrectDataTypes()
     {
-        return (String) line[TasksColumns.TaskStatus.GetId()];
+        for(var dt : line)
+            if(dt.toString().equals("") || dt.toString().length() > 50)
+                throw new IllegalArgumentException();
+        line[TasksColumns.ID.GetId()] = Integer.parseInt(line[0].toString());
+        line[TasksColumns.Name.GetId()] = line[TasksColumns.Name.GetId()].toString();
+        line[TasksColumns.TaskStatus.GetId()] = line[TasksColumns.TaskStatus.GetId()].toString();
+
     }
+
 
     public Node ApplyDataToXML(Node nod, Document doc)
     {
@@ -91,12 +98,67 @@ public class Task implements Line{
         return nod;
     }
 
+    private void UpdateIntoDB()
+    {
+        try {
+            String query = "UPDATE tasks SET ";
+            for(int i =0; i < DBcolumns.length; i++)
+            {
+                query+=DBcolumns[i]+"=";
+                if(line[i] instanceof String)
+                    query += "\'" + line[i].toString() + "\'";
+                else
+                    query += line[i].toString();
+                if(i != DBcolumns.length - 1)
+                    query+=", ";
+            }
+            query += "WHERE tasks.id = " + line[0].toString()+ ";";
+            Main.db.GetStatement().execute(query);
+        } catch (DBFacade.DBNotConnectedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void InsertIntoDB() {
+        try {
+            var questionsLine = new String(new char[DBcolumns.length]).replace("\0", "?,");
+            var lineQuery = Main.db.InsertQuery("insert into tasks("
+                    + String.join(", ", DBcolumns)
+                    + ") values("
+                    + questionsLine.substring(0, questionsLine.length() - 1)
+                    + ")", line);
+            lineQuery.execute();
+        } catch (DBFacade.DBNotConnectedException | SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void DeleteFromDB() {
+        try {
+            String query = "delete from tasks where id = " + line[TasksColumns.ID.GetId()].toString();
+            Main.db.GetStatement().executeUpdate(query);
+        } catch (DBFacade.DBNotConnectedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException {
         if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
             throw new IndexOutOfBoundsException(columnIndex);
-
         line[columnIndex] = value;
+        CorrectDataTypes();
+        UpdateIntoDB();
     }
 
     @Override

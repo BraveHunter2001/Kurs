@@ -29,4 +29,6 @@ public interface DataTable {
 
     public abstract DataTable GetConnectionItemById(List<Integer> ids);
 
+    public static DataTable GetFromDB(){return null;}
+    public abstract void SaveDB();
 }

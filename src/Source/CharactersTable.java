@@ -71,6 +71,7 @@ public class CharactersTable implements DataTable {
     {
         return CharacterColumns.values();
     }
+
     private Character GetRowAt(int row, DefaultTableModel model)
     {
         Object[] result = new Object[model.getColumnCount()];
@@ -186,5 +187,15 @@ public class CharactersTable implements DataTable {
         }
 
         return new CharactersTable(res);
+    }
+
+    public static CharactersTable GetFromDB(){
+
+        return null;
+    }
+
+    @Override
+    public void SaveDB() {
+
     }
 }

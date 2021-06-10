@@ -69,6 +69,8 @@ public class PDFExporter extends JFrame {
                 line.ApplyDataToPdfTable(pdfTable, font);
             }
 
+
+
             document.open();
             try {
                 document.add(pdfTable);

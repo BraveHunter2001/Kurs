@@ -8,12 +8,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Character implements Line {
     Object[] line;
+    private static String[] DBcolumns = {"id", "name", "apperance", "location", "meetingstatus"};
 
     public Character() { super(); }
 
@@ -77,7 +79,17 @@ public class Character implements Line {
 
         line = value;
     }
-
+    private void CorrectDataTypes()
+    {
+        for(var dt : line)
+            if(dt.toString().equals("") || dt.toString().length() > 50)
+                throw new IllegalArgumentException();
+        line[CharacterColumns.ID.GetId()] = Integer.parseInt(line[0].toString());
+        line[CharacterColumns.Name.GetId()] = line[CharacterColumns.Name.GetId()].toString();
+        line[CharacterColumns.Apperance.GetId()] = line[CharacterColumns.Apperance.GetId()].toString();
+        line[CharacterColumns.Location.GetId()] = line[CharacterColumns.Location.GetId()].toString();
+        line[CharacterColumns.MeetingStatus.GetId()] = line[CharacterColumns.MeetingStatus.GetId()].toString();
+    }
 
     String GetApperance()
     {
@@ -100,6 +112,8 @@ public class Character implements Line {
             throw new IndexOutOfBoundsException(columnIndex);
 
         line[columnIndex] = value;
+        CorrectDataTypes();
+        UpdateIntoDB();
     }
 
     @Override
@@ -166,6 +180,61 @@ public class Character implements Line {
         }
 
         return nod;
+    }
+
+    private void UpdateIntoDB()
+    {
+        try {
+            String query = "UPDATE characters SET ";
+            for(int i =0; i < DBcolumns.length; i++)
+            {
+                query+=DBcolumns[i]+"=";
+                if(line[i] instanceof String)
+                    query += "\'" + line[i].toString() + "\'";
+                else
+                    query += line[i].toString();
+                if(i != DBcolumns.length - 1)
+                    query+=", ";
+            }
+            query += "WHERE characters.id = " + line[0].toString()+ ";";
+            Main.db.GetStatement().execute(query);
+        } catch (DBFacade.DBNotConnectedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void InsertIntoDB() {
+        try {
+            var questionsLine = new String(new char[DBcolumns.length]).replace("\0", "?,");
+            var lineQuery = Main.db.InsertQuery("insert into characters("
+                    + String.join(", ", DBcolumns)
+                    + ") values("
+                    + questionsLine.substring(0, questionsLine.length() - 1)
+                    + ")", line);
+            lineQuery.execute();
+        } catch (DBFacade.DBNotConnectedException | SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void DeleteFromDB() {
+        try {
+            String query = "delete from characters where id = " + line[CharacterColumns.ID.GetId()].toString();
+            Main.db.GetStatement().executeUpdate(query);
+        } catch (DBFacade.DBNotConnectedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }
