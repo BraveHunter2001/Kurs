@@ -49,7 +49,7 @@ public class Character extends Line {
     public Character(int ID, String Name, String Apperance, String Location, String MeetingStatus)
     {
         if (line == null)
-            line = new Object[6];
+            line = new Object[5];
         line[CharacterColumns.ID.GetId()] = ID;
         line[CharacterColumns.Name.GetId()] = Name;
         line[CharacterColumns.Apperance.GetId()] = Apperance;

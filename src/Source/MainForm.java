@@ -2,7 +2,6 @@ package Source;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 import javax.swing.*;
 import Export.*;
 import Import.*;
@@ -69,8 +68,9 @@ public class MainForm extends JFrame{
 
     ConnectionTable connectionTable;
 
-    CharactersTable data;
-    CharactersTable viewData;
+    CharactersTable characterData;
+    CharactersTable viewCharacterData;
+
 
     TaskTable taskData;
     TaskTable viewTaskData;
@@ -259,14 +259,20 @@ public class MainForm extends JFrame{
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Add();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    AddCharacterRow();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    AddTaskRow();
             }
         });
 
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Delete();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
+                    DeleteCharacterRow();
+                if (modeParamBox.getSelectedItem() == ProgramMode.Tasks)
+                    DeleteTaskRow();
             }
         });
 
@@ -401,9 +407,9 @@ public class MainForm extends JFrame{
 
         //create tables Characters
         if (maindata == null)
-            data = new CharactersTable(charaterModel);
+            characterData = new CharactersTable(charaterModel);
         else
-            data = maindata;
+            characterData = maindata;
 
         // create tables Tasks
         if (taskDataMain == null)
@@ -411,8 +417,8 @@ public class MainForm extends JFrame{
         else
             taskData = taskDataMain;
 
-        viewData = data;
-        viewData.InsertDataInTableModel(charaterModel);
+        viewCharacterData = characterData;
+        viewCharacterData.InsertDataInTableModel(charaterModel);
 
         viewTaskData = taskData;
         viewTaskData.InsertDataInTableModel(taskModel);
@@ -427,6 +433,9 @@ public class MainForm extends JFrame{
         sortByLabel.setVisible(false);
         sortCharacterParamBox.setVisible(false);
         sortTaskParamBox.setVisible(false);
+
+        addButton.setVisible(false);
+        removeButton.setVisible(false);
 
         setVisible(true);
     }
@@ -459,6 +468,9 @@ public class MainForm extends JFrame{
             sortCharacterParamBox.setVisible(false);
             sortTaskParamBox.setVisible(true);
 
+            addButton.setVisible(true);
+            removeButton.setVisible(true);
+
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -469,7 +481,7 @@ public class MainForm extends JFrame{
 
             tablesPanel.add(charactersPanel);
             tablesPanel.add(tasksPanel);
-            data.InsertDataInTableModel(charaterModel);
+            characterData.InsertDataInTableModel(charaterModel);
 
             connectButton.setVisible(false);
             unConnectionButton.setVisible(false);
@@ -484,6 +496,9 @@ public class MainForm extends JFrame{
             sortCharacterParamBox.setVisible(true);
             sortTaskParamBox.setVisible(false);
 
+            addButton.setVisible(true);
+            removeButton.setVisible(true);
+
             setVisible(true);
 
             currentModel = charaterModel;
@@ -496,7 +511,7 @@ public class MainForm extends JFrame{
             tablesPanel.add(charactersPanel);
             tablesPanel.add(tasksPanel);
 
-            data.InsertDataInTableModel(charaterModel);
+            characterData.InsertDataInTableModel(charaterModel);
             taskData.InsertDataInTableModel(taskModel);
             currentModel = null;
 
@@ -513,20 +528,47 @@ public class MainForm extends JFrame{
             sortCharacterParamBox.setVisible(false);
             sortTaskParamBox.setVisible(false);
 
+            addButton.setVisible(false);
+            removeButton.setVisible(false);
+
             setVisible(true);
         }
 
     }
 
-    void Add()
+    void AddCharacterRow()
     {
-        charaterModel.addRow(data.AddRow(CharactersTable.DefaultCharacter.GetData()));;
+        charaterModel.addRow(characterData.AddRow(CharactersTable.DefaultCharacter.GetData()));;
+    }
+    void AddTaskRow()
+    {
+        taskModel.addRow(taskData.AddRow(TaskTable.DefaultTask.GetData()));;
     }
 
-    void Delete()
+    void DeleteCharacterRow()
     {
         try {
-            data.RemoveRow(charactersTable.getSelectedRow(), charaterModel);
+            int indexRowCharacter = charactersTable.getSelectedRow();
+            int idCharacter = (int) charaterModel.getValueAt(indexRowCharacter, 0);
+
+            connectionTable.UnConnectAllForCharacter(idCharacter);
+            characterData.RemoveRow(indexRowCharacter, charaterModel);
+        } catch ( IndexOutOfBoundsException e)
+        {
+            JOptionPane.showMessageDialog(null, "Select the row to delete!");
+        }
+
+    }
+
+    void DeleteTaskRow()
+    {
+        try {
+            int indexRowTask = taskTable.getSelectedRow();
+            int idTask = (int) taskModel.getValueAt(indexRowTask, 0);
+
+            connectionTable.UnConnectAllForTask(idTask);
+
+            taskData.RemoveRow(indexRowTask, taskModel);
         } catch ( IndexOutOfBoundsException e)
         {
             JOptionPane.showMessageDialog(null, "Select the row to delete!");
@@ -540,39 +582,41 @@ public class MainForm extends JFrame{
 
         if(text == null || text.equals(""))
         {
-            viewData = data;
-            viewData.InsertDataInTableModel(charaterModel);
+            viewCharacterData = characterData;
+            viewCharacterData.InsertDataInTableModel(charaterModel);
         }
         else
         {
-            viewData = data.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
-            viewData.InsertDataInTableModel(charaterModel);
+            viewCharacterData = characterData.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
+            viewCharacterData.InsertDataInTableModel(charaterModel);
         }
 
     }
 
     void Sort()
     {
-        viewData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
+        viewCharacterData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
 
     }
 
     void NewTable()
     {
-        viewData = data = new CharactersTable();
-        viewData.InsertDataInTableModel(charaterModel);
+        viewCharacterData = characterData = new CharactersTable();
+        viewTaskData = taskData = new TaskTable();
+        viewCharacterData.InsertDataInTableModel(charaterModel);
+        viewTaskData.InsertDataInTableModel(taskModel);
 
     }
 
     void Save()
     {
-        new TXTExporter("Save table", viewData);
+        new TXTExporter("Save table", viewCharacterData);
     }
 
     void Load()
     {
         new TXTImporter("Load table",this, charaterModel);
-        viewData = data;
+        viewCharacterData = characterData;
         Sort();
     }
 
@@ -582,7 +626,7 @@ public class MainForm extends JFrame{
         {
             Object newValue = charaterModel.getValueAt(row, column);
             int id = Integer.parseInt(charaterModel.getValueAt(row, 0).toString());
-             data.ChangeRow(id, column, newValue);
+             characterData.ChangeRow(id, column, newValue);
 
         }
     }
@@ -610,8 +654,8 @@ public class MainForm extends JFrame{
     {
         int idTask = (int)taskModel.getValueAt(row, 0);
         var hisCharacter = connectionTable.GetCharactersForTask(idTask);
-        viewData = data.GetCharacterTableById(hisCharacter);
-        viewData.InsertDataInTableModel(charaterModel);
+        viewCharacterData = characterData.GetCharacterTableById(hisCharacter);
+        viewCharacterData.InsertDataInTableModel(charaterModel);
     }
 
     void ConnectChTsk()
@@ -665,7 +709,7 @@ public class MainForm extends JFrame{
     void ExportXML()
     {
         try {
-            new XMLExporter(data);
+            new XMLExporter(characterData);
         }catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
@@ -673,18 +717,18 @@ public class MainForm extends JFrame{
 
     public void ApplyData(CharactersTable dat)
     {
-        viewData = data = dat;
-        viewData.InsertDataInTableModel(charaterModel);
+        viewCharacterData = characterData = dat;
+        viewCharacterData.InsertDataInTableModel(charaterModel);
     }
 
     public void SetData(CharactersTable sdata)
     {
-        data = sdata;
+        characterData = sdata;
     }
 
     public CharactersTable GetData()
     {
-        return data;
+        return characterData;
     }
 
     void ImportXML()
@@ -694,10 +738,10 @@ public class MainForm extends JFrame{
 
     void ExportPDF()
     {
-        new PDFExporter(data);
+        new PDFExporter(characterData);
     }
     void ExportHTML()
     {
-        new HTMLExporter(data);
+        new HTMLExporter(characterData);
     }
 }

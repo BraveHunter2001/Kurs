@@ -40,6 +40,23 @@ public class ConnectionTable {
 
     }
 
+    public void UnConnectAllForCharacter(int id)
+    {
+        var hisTasks = this.GetTasksForCharacter(id);
+
+        if (hisTasks != null)
+            for (var task: hisTasks)
+                this.UnConnect(id,task);
+    }
+    public void UnConnectAllForTask(int id)
+    {
+        var hisCharacter = this.GetCharactersForTask(id);
+
+        if (hisCharacter != null)
+            for (var chr: hisCharacter)
+                this.UnConnect(id,chr);
+    }
+
     public List<Integer> GetTasksForCharacter(int idCharacter)
     {
         List<Integer> res = new ArrayList<>();
