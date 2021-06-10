@@ -38,14 +38,15 @@ public class MainForm extends JFrame{
 
     //search
     private JLabel searchByLabel;
-    private JComboBox<CharacterColumns> searchParamBox;
+    private JComboBox<CharacterColumns> searchCharacterParamBox;
+    private JComboBox<TasksColumns> searchTaskParamBox;
     private JTextField searchField;
     private JButton searchButton;
 
     //sort
     private JLabel sortByLabel;
-    private JComboBox<CharacterColumns> sortParamBox;
-
+    private JComboBox<CharacterColumns> sortCharacterParamBox;
+    private JComboBox<TasksColumns> sortTaskParamBox;
     // characters
     private DefaultTableModel charaterModel;
     private JTable charactersTable;
@@ -157,12 +158,14 @@ public class MainForm extends JFrame{
 
         // toolbar-search
         searchByLabel = new JLabel("search by:");
-        searchParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
+        searchCharacterParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
+        searchTaskParamBox = new JComboBox<>(TasksColumns.values());
         searchField = new JTextField();
         searchButton = new JButton("Search");
 
         toolBar.add(searchByLabel);
-        toolBar.add(searchParamBox);
+        toolBar.add(searchCharacterParamBox);
+        toolBar.add(searchTaskParamBox);
         toolBar.add(searchField);
         toolBar.add(searchButton);
 
@@ -173,9 +176,11 @@ public class MainForm extends JFrame{
         //toolbar-sort
 
         sortByLabel = new JLabel("sort by: ");
-        sortParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
+        sortCharacterParamBox = new JComboBox<CharacterColumns>(CharacterColumns.values());
+        sortTaskParamBox = new JComboBox<>(TasksColumns.values());
         toolBar.add(sortByLabel);
-        toolBar.add(sortParamBox);
+        toolBar.add(sortCharacterParamBox);
+        toolBar.add(sortTaskParamBox);
         toolBar.setFloatable(false);
 
         getContentPane().add(toolBar, BorderLayout.NORTH);
@@ -279,7 +284,7 @@ public class MainForm extends JFrame{
             }
         });
 
-        sortParamBox.addItemListener(new ItemListener() {
+        sortCharacterParamBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED)
@@ -416,10 +421,12 @@ public class MainForm extends JFrame{
         searchByLabel.setVisible(false);
         searchField.setVisible(false);
         searchButton.setVisible(false);
-        searchParamBox.setVisible(false);
+        searchCharacterParamBox.setVisible(false);
+        searchTaskParamBox.setVisible(false);
 
         sortByLabel.setVisible(false);
-        sortParamBox.setVisible(false);
+        sortCharacterParamBox.setVisible(false);
+        sortTaskParamBox.setVisible(false);
 
         setVisible(true);
     }
@@ -445,11 +452,12 @@ public class MainForm extends JFrame{
             searchByLabel.setVisible(true);
             searchField.setVisible(true);
             searchButton.setVisible(true);
-            searchParamBox.setVisible(true);
+            searchCharacterParamBox.setVisible(false);
+            searchTaskParamBox.setVisible(true);
 
             sortByLabel.setVisible(true);
-            sortParamBox.setVisible(true);
-
+            sortCharacterParamBox.setVisible(false);
+            sortTaskParamBox.setVisible(true);
 
             setVisible(true);
         }
@@ -469,10 +477,12 @@ public class MainForm extends JFrame{
             searchByLabel.setVisible(true);
             searchField.setVisible(true);
             searchButton.setVisible(true);
-            searchParamBox.setVisible(true);
+            searchCharacterParamBox.setVisible(true);
+            searchTaskParamBox.setVisible(false);
 
             sortByLabel.setVisible(true);
-            sortParamBox.setVisible(true);
+            sortCharacterParamBox.setVisible(true);
+            sortTaskParamBox.setVisible(false);
 
             setVisible(true);
 
@@ -496,10 +506,12 @@ public class MainForm extends JFrame{
             searchByLabel.setVisible(false);
             searchField.setVisible(false);
             searchButton.setVisible(false);
-            searchParamBox.setVisible(false);
+            searchCharacterParamBox.setVisible(false);
+            searchTaskParamBox.setVisible(false);
 
             sortByLabel.setVisible(false);
-            sortParamBox.setVisible(false);
+            sortCharacterParamBox.setVisible(false);
+            sortTaskParamBox.setVisible(false);
 
             setVisible(true);
         }
@@ -533,7 +545,7 @@ public class MainForm extends JFrame{
         }
         else
         {
-            viewData = data.Search(searchParamBox.getSelectedIndex(), searchField.getText());
+            viewData = data.Search(searchCharacterParamBox.getSelectedIndex(), searchField.getText());
             viewData.InsertDataInTableModel(charaterModel);
         }
 
@@ -541,7 +553,7 @@ public class MainForm extends JFrame{
 
     void Sort()
     {
-        viewData.Sort(sortParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
+        viewData.Sort(sortCharacterParamBox.getSelectedIndex()).InsertDataInTableModel(charaterModel);
 
     }
 
