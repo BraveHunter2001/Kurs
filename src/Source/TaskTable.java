@@ -1,11 +1,12 @@
 package Source;
 
 import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
 import java.util.*;
 
 public class TaskTable implements DataTable {
     public static Task DefaultTask = new Task(0, "Found 10 mashrooms", "Taken");
-
+    private static String[] DBcolumns = {"id", "name", "taskstatus"};
     public static List<Task> DefaultTasks = Arrays.asList(new Task[]{DefaultTask});
 
     List<Task> rows = new ArrayList<Task>();
@@ -43,7 +44,9 @@ public class TaskTable implements DataTable {
         int len = values.length;
         System.arraycopy(values, 0, newRow,0, len);
         newRow[TasksColumns.ID.GetId()] = newId;
-        rows.add(new Task(newRow));
+        var ts = new Task(newRow);
+        ts.InsertIntoDB();
+        rows.add(ts);
         return newRow;
     }
 
@@ -53,6 +56,7 @@ public class TaskTable implements DataTable {
             throw  new IndexOutOfBoundsException(index);
 
         model.removeRow(index);
+        rows.get(index).DeleteFromDB();
         rows.remove(index);
     }
 
@@ -80,6 +84,13 @@ public class TaskTable implements DataTable {
 
     private void ClearTable(DefaultTableModel model)
     {
+        try {
+            Main.db.ExcecuteQuery("TRUNCATE characters CASCADE");
+        } catch (DBFacade.DBNotConnectedException e) {
+            // records were empty
+            //e.printStackTrace();
+        }
+
         if(model != null)
         {
             while (model.getRowCount() > 0)
@@ -187,5 +198,40 @@ public class TaskTable implements DataTable {
         }
 
         return new TaskTable(res);
+    }
+
+    public static TaskTable GetFromDB(){
+        try {
+            var rs = Main.db.ExcecuteQuery("SELECT "+String.join(", ", DBcolumns)+" FROM tasks");
+            ArrayList<Task> lns = new ArrayList<>();
+            while(rs.next())
+            {
+                var vals = new Object[DBcolumns.length];
+                for(int i = 0; i < DBcolumns.length; i++)
+                    vals[i] = rs.getObject(i+1);
+                var ln = new Task(vals);
+                lns.add(ln);
+            }
+            return new TaskTable(lns);
+        } catch (DBFacade.DBNotConnectedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void SaveDB() {
+        try {
+            Main.db.ExcecuteQuery("TRUNCATE tasks CASCADE");
+        } catch (DBFacade.DBNotConnectedException e) {
+            // records were empty
+            //e.printStackTrace();
+        }
+        for(var ln : rows)
+            ln.InsertIntoDB();
     }
 }
