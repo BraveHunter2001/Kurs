@@ -11,9 +11,10 @@ import org.w3c.dom.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task extends Line{
+public class Task implements Line{
 
 
+    Object[] line;
     public Task() { super(); }
 
     public Task(Object[] ln) throws IllegalArgumentException
@@ -56,7 +57,6 @@ public class Task extends Line{
 
     }
 
-
     public Task(Node nod)
     {
         Object[] value = new Object[TasksColumns.values().length];
@@ -69,7 +69,6 @@ public class Task extends Line{
 
         line = value;
     }
-
 
     String GetTaskStatus()
     {
@@ -86,6 +85,66 @@ public class Task extends Line{
             rec.setAttribute(TasksColumns.values()[i].toString(),dat);
         }
         return nod;
+    }
+
+    @Override
+    public void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException {
+        if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
+            throw new IndexOutOfBoundsException(columnIndex);
+
+        line[columnIndex] = value;
+    }
+
+    @Override
+    public int GetID() {
+        return Integer.parseInt(line[TasksColumns.ID.GetId()].toString());
+    }
+
+    @Override
+    public String GetName() {
+        return line[TasksColumns.Name.GetId()].toString();
+    }
+
+    @Override
+    public Object[] GetData() {
+        return line;
+    }
+
+    @Override
+    public boolean isEqual(int columnIndex, String value) throws IndexOutOfBoundsException {
+        if (columnIndex >= TasksColumns.values().length || columnIndex < 0)
+            throw new IndexOutOfBoundsException(columnIndex);
+
+        if(line[columnIndex] == null && value == null)
+            return true;
+        {
+            if(line[columnIndex] == null && value != null || line[columnIndex] != null && value == null)
+                return false;
+            if (line[columnIndex].toString().equals(value))
+                return true;
+        }
+        return false;
+    }
+
+    public String GetHTMLTable()
+    {
+        String res = "<tr>";
+        for (int i =0 ; i < line.length; i++)
+        {
+            String dat  = (line[i] == null ?"": line[i].toString());
+            res+= "<td>" + dat +"</td>";
+        }
+        res += "</tr>";
+        return res;
+    }
+
+    @Override
+    public void ApplyDataToPdfTable(PdfPTable pdfPTable, Font font) {
+        for(int i = 0; i < TasksColumns.values().length; i++)
+        {
+            String dat  = (line[i] == null ?"": line[i].toString());
+            pdfPTable.addCell(new Phrase(dat, font));
+        }
     }
 
 

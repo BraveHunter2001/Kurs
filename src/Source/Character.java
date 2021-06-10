@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Character extends Line {
+public class Character implements Line {
+    Object[] line;
 
     public Character() { super(); }
 
@@ -76,7 +77,6 @@ public class Character extends Line {
         line = value;
     }
 
-
     String GetApperance()
     {
         return line[CharacterColumns.Apperance.GetId()].toString();
@@ -92,6 +92,66 @@ public class Character extends Line {
         return (String) line[CharacterColumns.MeetingStatus.GetId()];
     }
 
+    @Override
+    public void SetValue(int columnIndex, Object value) throws IndexOutOfBoundsException {
+        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
+            throw new IndexOutOfBoundsException(columnIndex);
+
+        line[columnIndex] = value;
+    }
+
+    @Override
+    public int GetID() {
+        return Integer.parseInt(line[CharacterColumns.ID.GetId()].toString());
+    }
+
+    @Override
+    public String GetName() {
+        return line[CharacterColumns.Name.GetId()].toString();
+    }
+
+    @Override
+    public Object[] GetData() {
+        return line;
+    }
+
+    @Override
+    public boolean isEqual(int columnIndex, String value) throws IndexOutOfBoundsException {
+        if (columnIndex >= CharacterColumns.values().length || columnIndex < 0)
+            throw new IndexOutOfBoundsException(columnIndex);
+
+
+        if(line[columnIndex] == null && value == null)
+            return true;
+        {
+            if(line[columnIndex] == null && value != null || line[columnIndex] != null && value == null)
+                return false;
+            if (line[columnIndex].toString().equals(value))
+                return true;
+        }
+        return false;
+    }
+
+    public String GetHTMLTable()
+    {
+        String res = "<tr>";
+        for (int i =0 ; i < line.length; i++)
+        {
+            String dat  = (line[i] == null ?"": line[i].toString());
+            res+= "<td>" + dat +"</td>";
+        }
+        res += "</tr>";
+        return res;
+    }
+
+    @Override
+    public void ApplyDataToPdfTable(PdfPTable pdfPTable, Font font) {
+        for(int i = 0; i < CharacterColumns.values().length; i++)
+        {
+            String dat  = (line[i] == null ?"": line[i].toString());
+            pdfPTable.addCell(new Phrase(dat, font));
+        }
+    }
 
     public Node ApplyDataToXML(Node nod, Document doc)
     {

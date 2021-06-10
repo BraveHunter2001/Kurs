@@ -3,7 +3,7 @@ package Source;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
-public class TaskTable extends DataTable{
+public class TaskTable implements DataTable {
     public static Task DefaultTask = new Task(0, "Found 10 mashrooms", "Taken");
 
     public static List<Task> DefaultTasks = Arrays.asList(new Task[]{DefaultTask});
@@ -67,7 +67,7 @@ public class TaskTable extends DataTable{
         }
     }
 
-    Task GetRowAt(int row, DefaultTableModel model)
+    private Task GetRowAt(int row, DefaultTableModel model)
     {
         Object[] result = new Object[model.getColumnCount()];
         for (int i = 0; i < model.getColumnCount(); i++)
@@ -78,6 +78,14 @@ public class TaskTable extends DataTable{
         return new Task(result);
     }
 
+    private void ClearTable(DefaultTableModel model)
+    {
+        if(model != null)
+        {
+            while (model.getRowCount() > 0)
+                model.removeRow(0);
+        }
+    }
 
     public TaskTable Search(int columnIndex, String value) throws IndexOutOfBoundsException
     {
@@ -150,7 +158,7 @@ public class TaskTable extends DataTable{
         return rows;
     }
 
-    public TaskTable GetTaskTableById(List<Integer> ids)
+    public TaskTable GetConnectionItemById(List<Integer> ids)
     {
         List<Task> res = new ArrayList<>();
         if (ids == null)

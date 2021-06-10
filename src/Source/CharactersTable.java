@@ -4,7 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
 
-public class CharactersTable {
+public class CharactersTable implements DataTable {
 
 
     public static Character DefaultCharacter = new Character(0, "Tel", "Human", "Village", "Met");
@@ -47,15 +47,6 @@ public class CharactersTable {
         return newRow;
     }
 
-    public void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException
-    {
-        if (index >= CharacterColumns.values().length || index < 0 )
-            throw  new IndexOutOfBoundsException(index);
-
-        model.removeRow(index);
-        rows.remove(index);
-    }
-
     public void ChangeRow(int rowId, int column, Object newValue)
     {
         for(int i = 0; i < rows.size(); i++)
@@ -67,7 +58,17 @@ public class CharactersTable {
         }
     }
 
-    Character GetRowAt(int row, DefaultTableModel model)
+    public void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException
+    {
+        if (index >= CharacterColumns.values().length || index < 0 )
+            throw  new IndexOutOfBoundsException(index);
+
+        model.removeRow(index);
+        rows.remove(index);
+    }
+
+
+    private Character GetRowAt(int row, DefaultTableModel model)
     {
         Object[] result = new Object[model.getColumnCount()];
         for (int i = 0; i < model.getColumnCount(); i++)
@@ -78,6 +79,14 @@ public class CharactersTable {
         return new Character(result);
     }
 
+    private void ClearTable(DefaultTableModel model)
+    {
+        if(model != null)
+        {
+            while (model.getRowCount() > 0)
+                model.removeRow(0);
+        }
+    }
 
     public CharactersTable Search(int columnIndex, String value) throws IndexOutOfBoundsException
     {
@@ -110,7 +119,6 @@ public class CharactersTable {
         {
             array[i] = rows.get(i).GetData();
         }
-
 
         model.setDataVector(array, CharacterColumns.values());
     }
@@ -151,7 +159,7 @@ public class CharactersTable {
         return rows;
     }
 
-    public CharactersTable GetCharacterTableById(List<Integer> ids)
+    public CharactersTable GetConnectionItemById(List<Integer> ids)
     {
         List<Character> res = new ArrayList<>();
         if (ids == null)

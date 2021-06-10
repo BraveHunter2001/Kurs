@@ -1,51 +1,28 @@
 package Source;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DataTable {
+public interface DataTable {
 
-    List<Line> rows = new ArrayList<Line>();
+    public abstract Object[] AddRow(Object[] values);
 
-    public DataTable() { }
+    public abstract void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException;
 
-    public DataTable(DefaultTableModel model)
-    {
+    public abstract void ChangeRow(int rowId, int column, Object newValue);
 
-    }
+    private Line GetRowAt(int row, DefaultTableModel model){return null;};
 
-    public DataTable(List<Line> lines)
-    {
-        rows = lines;
-    }
+    public abstract DataTable Search(int columnIndex, String value) throws IndexOutOfBoundsException;
 
+    public abstract DataTable Sort(int columnIndex);
 
-    public void DataTable(int index, DefaultTableModel model) throws IndexOutOfBoundsException {
-    }
+    public abstract List Rows();
 
-    public void DataTable(int rowId, int column, Object newValue) {
-    }
+    private void ClearTable(DefaultTableModel model) { }
 
-    private void ClearDataTable(DefaultTableModel model)
-    {
-        if(model != null)
-        {
-            while (model.getRowCount() > 0)
-                model.removeRow(0);
-        }
-    }
+    public abstract void InsertDataInTableModel (DefaultTableModel model);
 
-    public void InsertDataInTableModel (DefaultTableModel model)
-    {
-        Object[][] array = new Object[rows.size()][];
-        for(int i =0; i< rows.size(); i++)
-        {
-            array[i] = rows.get(i).GetData();
-        }
-
-        model.setDataVector(array, CharacterColumns.values());
-    }
-
+    public abstract DataTable GetConnectionItemById(List<Integer> ids);
 
 }

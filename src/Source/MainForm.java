@@ -679,7 +679,7 @@ public class MainForm extends JFrame{
     {
        int idCharacter = (int)charaterModel.getValueAt(row, 0);
        var hisTasks = connectionTable.GetTasksForCharacter(idCharacter);
-       viewTaskData = taskData.GetTaskTableById(hisTasks);
+       viewTaskData = taskData.GetConnectionItemById(hisTasks);
        viewTaskData.InsertDataInTableModel(taskModel);
     }
 
@@ -687,7 +687,7 @@ public class MainForm extends JFrame{
     {
         int idTask = (int)taskModel.getValueAt(row, 0);
         var hisCharacter = connectionTable.GetCharactersForTask(idTask);
-        viewCharacterData = characterData.GetCharacterTableById(hisCharacter);
+        viewCharacterData = characterData.GetConnectionItemById(hisCharacter);
         viewCharacterData.InsertDataInTableModel(charaterModel);
     }
 
