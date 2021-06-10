@@ -650,11 +650,20 @@ public class MainForm extends JFrame{
 
     void NewTable()
     {
-        viewCharacterData = characterData = new CharactersTable();
-        viewTaskData = taskData = new TaskTable();
-        viewCharacterData.InsertDataInTableModel(charaterModel);
-        viewTaskData.InsertDataInTableModel(taskModel);
-
+        if (GetModeProgram() == ProgramMode.Characters)
+        {
+            viewCharacterData = characterData = new CharactersTable();
+            viewCharacterData.InsertDataInTableModel(charaterModel);
+        } else if (GetModeProgram() == ProgramMode.Tasks)
+        {
+            viewTaskData = taskData = new TaskTable();
+            viewTaskData.InsertDataInTableModel(taskModel);
+        }else {
+            viewCharacterData = characterData = new CharactersTable();
+            viewTaskData = taskData = new TaskTable();
+            viewCharacterData.InsertDataInTableModel(charaterModel);
+            viewTaskData.InsertDataInTableModel(taskModel);
+        }
     }
 
     void Save(DataTable viewData)
