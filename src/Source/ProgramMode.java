@@ -12,8 +12,4 @@ public enum ProgramMode {
         this.id = id;
     }
 
-    public int GetId()
-    {
-        return id;
-    }
 }

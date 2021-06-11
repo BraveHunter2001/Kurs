@@ -16,7 +16,6 @@ public class Task implements Line{
     private static String[] DBcolumns = {"id", "name", "taskstatus"};
 
     Object[] line;
-    public Task() { super(); }
 
     public Task(Object[] ln) throws IllegalArgumentException
     {

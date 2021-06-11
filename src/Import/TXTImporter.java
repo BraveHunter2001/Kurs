@@ -58,6 +58,7 @@ public class TXTImporter extends JFrame{
                     if (splitted.length == TasksColumns.values().length)
                         tasks.add(new Task(splitted));
                 }
+
                 form.GetTaskData().ClearTable(form.GetTaskModel());
                 form.SetTaskData(new TaskTable(tasks));
                 form.GetTaskData().SaveDB();

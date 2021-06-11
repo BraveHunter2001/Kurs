@@ -155,7 +155,7 @@ public class MainForm extends JFrame{
         toolBar.add(unConnectionButton);
 
         toolBar.add(Box.createHorizontalStrut(5));
-        toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+        //toolBar.add(new JSeparator(SwingConstants.VERTICAL));
         toolBar.add(Box.createHorizontalStrut(5));
 
         // toolbar-search
@@ -172,7 +172,7 @@ public class MainForm extends JFrame{
         toolBar.add(searchButton);
 
         toolBar.add(Box.createHorizontalStrut(5));
-        toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+        //toolBar.add(new JSeparator(SwingConstants.VERTICAL));
         toolBar.add(Box.createHorizontalStrut(5));
 
         //toolbar-sort
@@ -692,6 +692,7 @@ public class MainForm extends JFrame{
 
     void Load()
     {
+        connectionTable.ClearConnectionTable();
         new TXTImporter("Load table",this);
         viewCharacterData = characterData;
         viewTaskData = taskData;
@@ -788,18 +789,24 @@ public class MainForm extends JFrame{
 
     public void ApplyDataCharacter(DataTable thisData)
     {
+        connectionTable.ClearConnectionTable();
         characterData.ClearTable(charaterModel);
         thisData.SaveDB();
         viewCharacterData = characterData = (CharactersTable)thisData;
         viewCharacterData.InsertDataInTableModel(charaterModel);
+        Sort(viewCharacterData,sortCharacterParamBox,charaterModel);
+        Sort(viewTaskData,sortTaskParamBox,taskModel);
     }
 
     public void ApplyDataTask(DataTable thisData)
     {
+        connectionTable.ClearConnectionTable();
         taskData.ClearTable(taskModel);
         thisData.SaveDB();
         viewTaskData = taskData = (TaskTable)thisData;
         viewTaskData.InsertDataInTableModel(taskModel);
+        Sort(viewCharacterData,sortCharacterParamBox,charaterModel);
+        Sort(viewTaskData,sortTaskParamBox,taskModel);
     }
 
     public void SetCharacterData(CharactersTable sdata)
@@ -816,22 +823,13 @@ public class MainForm extends JFrame{
     {
         return characterData;
     }
-    public CharactersTable GetCharactersViewData()
-    {
-        return viewCharacterData;
-    }
     public DefaultTableModel GetCharacterModel() {return charaterModel;}
 
     public TaskTable GetTaskData()
     {
         return taskData;
     }
-    public TaskTable GetTaskViewData()
-    {
-        return viewTaskData;
-    }
     public DefaultTableModel GetTaskModel() {return taskModel;}
-
     public ProgramMode GetModeProgram () {return (ProgramMode) modeParamBox.getSelectedItem();}
 
     void ImportXML()

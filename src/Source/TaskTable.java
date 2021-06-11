@@ -11,17 +11,6 @@ public class TaskTable implements DataTable {
 
     List<Task> rows = new ArrayList<Task>();
 
-    public TaskTable(DefaultTableModel model)
-    {
-        try {
-            for (int i = 0; i < model.getRowCount(); i++) {
-                rows.add(GetRowAt(i, model));
-            }
-        } catch ( IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     public TaskTable(List<Task> lines)
     {
@@ -74,16 +63,6 @@ public class TaskTable implements DataTable {
         }
     }
 
-    private Task GetRowAt(int row, DefaultTableModel model)
-    {
-        Object[] result = new Object[model.getColumnCount()];
-        for (int i = 0; i < model.getColumnCount(); i++)
-        {
-            result[i] = model.getValueAt(row, i);
-        }
-
-        return new Task(result);
-    }
 
     public void ClearTable(DefaultTableModel model)
     {

@@ -17,7 +17,6 @@ public class Character implements Line {
     Object[] line;
     private static String[] DBcolumns = {"id", "name", "apperance", "location", "meetingstatus"};
 
-    public Character() { super(); }
 
     public Character(Object[] ln) throws IllegalArgumentException
     {
@@ -89,21 +88,6 @@ public class Character implements Line {
         line[CharacterColumns.Apperance.GetId()] = line[CharacterColumns.Apperance.GetId()].toString();
         line[CharacterColumns.Location.GetId()] = line[CharacterColumns.Location.GetId()].toString();
         line[CharacterColumns.MeetingStatus.GetId()] = line[CharacterColumns.MeetingStatus.GetId()].toString();
-    }
-
-    String GetApperance()
-    {
-        return line[CharacterColumns.Apperance.GetId()].toString();
-    }
-
-    String GetLocation()
-    {
-        return line[CharacterColumns.Location.GetId()].toString();
-    }
-
-    String GetMeetingStatus()
-    {
-        return (String) line[CharacterColumns.MeetingStatus.GetId()];
     }
 
     @Override

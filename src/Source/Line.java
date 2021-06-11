@@ -24,7 +24,6 @@ public interface Line {
 
     public abstract Node ApplyDataToXML(Node nod, Document doc);
 
-    private void UpdateIntoDB(){}
     public abstract void InsertIntoDB();
     public abstract void DeleteFromDB();
 }

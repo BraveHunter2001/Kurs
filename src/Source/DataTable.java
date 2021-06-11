@@ -11,8 +11,6 @@ public interface DataTable {
 
     public abstract void ChangeRow(int rowId, int column, Object newValue);
 
-    private Line GetRowAt(int row, DefaultTableModel model){return null;};
-
     public abstract DataTable Search(int columnIndex, String value) throws IndexOutOfBoundsException;
 
     public abstract DataTable Sort(int columnIndex);
@@ -29,6 +27,5 @@ public interface DataTable {
 
     public abstract DataTable GetConnectionItemById(List<Integer> ids);
 
-    //public abstract DataTable GetFromDB();
     public abstract void SaveDB();
 }

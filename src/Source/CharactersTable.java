@@ -13,17 +13,6 @@ public class CharactersTable implements DataTable {
     public static Character DefaultCharacter = new Character(0, "Tel", "Human", "Village", "Met");
     List<Character> rows = new ArrayList<Character>();
 
-    public CharactersTable(DefaultTableModel model)
-    {
-        try {
-            for (int i = 0; i < model.getRowCount(); i++) {
-                rows.add(GetRowAt(i, model));
-            }
-        } catch ( IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     public CharactersTable(List<Character> lines)
     {
@@ -79,17 +68,6 @@ public class CharactersTable implements DataTable {
     public CharacterColumns[] GetColumns()
     {
         return CharacterColumns.values();
-    }
-
-    private Character GetRowAt(int row, DefaultTableModel model)
-    {
-        Object[] result = new Object[model.getColumnCount()];
-        for (int i = 0; i < model.getColumnCount(); i++)
-        {
-            result[i] = model.getValueAt(row, i);
-        }
-
-        return new Character(result);
     }
 
     public void ClearTable(DefaultTableModel model)

@@ -43,6 +43,7 @@ public class ConnectionTable {
 
     public void UnConnect(int idCharacter, int idTask)
     {
+
         for (int i=0; i < connectionList.size(); i++)
         {
             int[] idPar = connectionList.get(i);
@@ -157,9 +158,17 @@ public class ConnectionTable {
         return null;
     }
 
-    public void ClearConnectionTable()
-    {
-        for(int i =0; i < connectionList.size(); i++)
-            UnConnect(connectionList.get(i)[0],connectionList.get(i)[1]);
+    public void ClearConnectionTable() {
+        for (int i = 0; i < connectionList.size(); i++) {
+            int[] idPar = connectionList.get(i);
+            {
+                DeleteFromDB(toObjects(idPar));
+
+            }
+        }
+
+        for (int i = 0; i < connectionList.size(); i++) {
+            connectionList.remove(0);
+        }
     }
 }
