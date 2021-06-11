@@ -43,7 +43,9 @@ public class TXTImporter extends JFrame{
                     if (splitted.length == CharacterColumns.values().length)
                         characters.add(new Character(splitted));
                 }
+                form.GetCharactersData().ClearTable(form.GetCharacterModel());
                 form.SetCharacterData(new CharactersTable(characters));
+                form.GetCharactersData().SaveDB();
                 form.GetCharactersData().InsertDataInTableModel(form.GetCharacterModel());
 
             }else if (form.GetModeProgram() == ProgramMode.Tasks)
@@ -56,7 +58,9 @@ public class TXTImporter extends JFrame{
                     if (splitted.length == TasksColumns.values().length)
                         tasks.add(new Task(splitted));
                 }
+                form.GetTaskData().ClearTable(form.GetTaskModel());
                 form.SetTaskData(new TaskTable(tasks));
+                form.GetTaskData().SaveDB();
                 form.GetTaskData().InsertDataInTableModel(form.GetTaskModel());
             }
 

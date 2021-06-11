@@ -13,7 +13,7 @@ public class Main {
         logger.info("Start program");
         db = new DBFacade();
         db.ConnectDB();
-        new MainForm(null, null);
+        new MainForm();
         logger.info("Finish program");
     }
 }

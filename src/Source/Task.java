@@ -27,7 +27,8 @@ public class Task implements Line{
 
         if (line == null)
             line = new Object[3];
-        CorrectDataTypes();
+
+
         line = ln;
     }
 

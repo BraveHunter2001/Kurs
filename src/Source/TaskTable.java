@@ -50,14 +50,17 @@ public class TaskTable implements DataTable {
         return newRow;
     }
 
-    public void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException
+    public void RemoveRow(int rowId) throws IndexOutOfBoundsException
     {
-        if (index >= TasksColumns.values().length || index < 0 )
-            throw  new IndexOutOfBoundsException(index);
-
-        model.removeRow(index);
-        rows.get(index).DeleteFromDB();
-        rows.remove(index);
+        if(rowId < 0)
+            throw new IndexOutOfBoundsException("rowId and column should be positive integers");
+        for(int i = 0; i < rows.size(); i++)
+            if(rows.get(i).GetID() == rowId)
+            {
+                rows.get(i).DeleteFromDB();
+                rows.remove(i);
+                return;
+            }
     }
 
     public void ChangeRow(int rowId, int column, Object newValue)
@@ -82,13 +85,11 @@ public class TaskTable implements DataTable {
         return new Task(result);
     }
 
-    private void ClearTable(DefaultTableModel model)
+    public void ClearTable(DefaultTableModel model)
     {
-        try {
-            Main.db.ExcecuteQuery("TRUNCATE characters CASCADE");
-        } catch (DBFacade.DBNotConnectedException e) {
-            // records were empty
-            //e.printStackTrace();
+        for (int i =0; i < rows.size(); i++)
+        {
+            rows.get(i).DeleteFromDB();
         }
 
         if(model != null)
@@ -200,7 +201,7 @@ public class TaskTable implements DataTable {
         return new TaskTable(res);
     }
 
-    public static TaskTable GetFromDB(){
+    public static TaskTable GetTaskTableFromDB(){
         try {
             var rs = Main.db.ExcecuteQuery("SELECT "+String.join(", ", DBcolumns)+" FROM tasks");
             ArrayList<Task> lns = new ArrayList<>();
@@ -225,12 +226,7 @@ public class TaskTable implements DataTable {
 
     @Override
     public void SaveDB() {
-        try {
-            Main.db.ExcecuteQuery("TRUNCATE tasks CASCADE");
-        } catch (DBFacade.DBNotConnectedException e) {
-            // records were empty
-            //e.printStackTrace();
-        }
+
         for(var ln : rows)
             ln.InsertIntoDB();
     }

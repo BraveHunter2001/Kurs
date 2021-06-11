@@ -1,5 +1,7 @@
 package Source;
 
+import org.postgresql.util.PSQLException;
+
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.*;
@@ -61,14 +63,17 @@ public class CharactersTable implements DataTable {
         }
     }
 
-    public void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException
+    public void RemoveRow(int rowId) throws IndexOutOfBoundsException
     {
-        if (index >= CharacterColumns.values().length || index < 0 )
-            throw  new IndexOutOfBoundsException(index);
-
-        model.removeRow(index);
-        rows.get(index).DeleteFromDB();
-        rows.remove(index);
+        if(rowId < 0)
+            throw new IndexOutOfBoundsException("rowId and column should be positive integers");
+        for(int i = 0; i < rows.size(); i++)
+            if(rows.get(i).GetID() == rowId)
+            {
+                rows.get(i).DeleteFromDB();
+                rows.remove(i);
+                return;
+            }
     }
 
     public CharacterColumns[] GetColumns()
@@ -87,13 +92,11 @@ public class CharactersTable implements DataTable {
         return new Character(result);
     }
 
-    private void ClearTable(DefaultTableModel model)
+    public void ClearTable(DefaultTableModel model)
     {
-        try {
-            Main.db.ExcecuteQuery("TRUNCATE characters CASCADE");
-        } catch (DBFacade.DBNotConnectedException e) {
-            // records were empty
-            //e.printStackTrace();
+        for (int i =0; i < rows.size(); i++)
+        {
+            rows.get(i).DeleteFromDB();
         }
         if(model != null)
         {
@@ -199,7 +202,7 @@ public class CharactersTable implements DataTable {
         return new CharactersTable(res);
     }
 
-    public static CharactersTable GetFromDB(){
+    public static CharactersTable GetCharactersTableFromDB(){
         try {
             var rs = Main.db.ExcecuteQuery("SELECT "+String.join(", ", DBcolumns)+" FROM characters");
             ArrayList<Character> lns = new ArrayList<>();
@@ -224,12 +227,7 @@ public class CharactersTable implements DataTable {
 
     @Override
     public void SaveDB() {
-        try {
-            Main.db.ExcecuteQuery("TRUNCATE characters CASCADE");
-        } catch (DBFacade.DBNotConnectedException e) {
-            // records were empty
-            //e.printStackTrace();
-        }
+
         for(var ln : rows)
             ln.InsertIntoDB();
     }

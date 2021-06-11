@@ -7,7 +7,7 @@ public interface DataTable {
 
     public abstract Object[] AddRow(Object[] values);
 
-    public abstract void RemoveRow(int index, DefaultTableModel model) throws IndexOutOfBoundsException;
+    public abstract void RemoveRow(int index) throws IndexOutOfBoundsException;
 
     public abstract void ChangeRow(int rowId, int column, Object newValue);
 
@@ -23,12 +23,12 @@ public interface DataTable {
 
     public abstract Line GetDefault();
 
-    private void ClearTable(DefaultTableModel model) { }
+    default void ClearTable(DefaultTableModel model) { }
 
     public abstract void InsertDataInTableModel (DefaultTableModel model);
 
     public abstract DataTable GetConnectionItemById(List<Integer> ids);
 
-    public static DataTable GetFromDB(){return null;}
+    //public abstract DataTable GetFromDB();
     public abstract void SaveDB();
 }

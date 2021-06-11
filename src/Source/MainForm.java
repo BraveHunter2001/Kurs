@@ -76,7 +76,7 @@ public class MainForm extends JFrame{
     TaskTable taskData;
     TaskTable viewTaskData;
 
-    public MainForm(CharactersTable maindata, TaskTable taskDataMain)
+    public MainForm()
     {
         //init window
         super("Master Characters list");
@@ -84,6 +84,7 @@ public class MainForm extends JFrame{
         setLocation(200, 200);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         //top menu
         menuBar = new JMenuBar();
@@ -107,7 +108,7 @@ public class MainForm extends JFrame{
         fileMenu.add(exportXMLMenuItem);
         fileMenu.add(importXMLMenuItem);
 
-        fileMenu.add(new JLabel("Report"));
+
         fileMenu.add(exportPDFMenuItem);
         fileMenu.add(exportHTMLMenuItem);
         fileMenu.addSeparator();
@@ -432,17 +433,9 @@ public class MainForm extends JFrame{
             }
         });
 
-        //create tables Characters
-        if (maindata == null)
-            characterData = new CharactersTable(charaterModel);
-        else
-            characterData = maindata;
-
-        // create tables Tasks
-        if (taskDataMain == null)
-            taskData = new TaskTable(charaterModel);
-        else
-            taskData = taskDataMain;
+        characterData = CharactersTable.GetCharactersTableFromDB();
+        taskData = TaskTable.GetTaskTableFromDB();
+        connectionTable = ConnectionTable.GetConnectionFromDB();
 
         viewCharacterData = characterData;
         viewCharacterData.InsertDataInTableModel(charaterModel);
@@ -473,6 +466,8 @@ public class MainForm extends JFrame{
         exportXMLMenuItem.setVisible(false);
         importXMLMenuItem.setVisible(false);
 
+        exportPDFMenuItem.setVisible(false);
+        exportHTMLMenuItem.setVisible(false);
         setVisible(true);
     }
 
@@ -517,6 +512,9 @@ public class MainForm extends JFrame{
             exportXMLMenuItem.setVisible(true);
             importXMLMenuItem.setVisible(true);
 
+            exportPDFMenuItem.setVisible(true);
+            exportHTMLMenuItem.setVisible(true);
+
             setVisible(true);
         }
         else if (modeParamBox.getSelectedItem() == ProgramMode.Characters)
@@ -554,6 +552,8 @@ public class MainForm extends JFrame{
             exportXMLMenuItem.setVisible(true);
             importXMLMenuItem.setVisible(true);
 
+            exportPDFMenuItem.setVisible(true);
+            exportHTMLMenuItem.setVisible(true);
             setVisible(true);
 
 
@@ -595,6 +595,9 @@ public class MainForm extends JFrame{
             exportXMLMenuItem.setVisible(false);
             importXMLMenuItem.setVisible(false);
 
+            exportPDFMenuItem.setVisible(false);
+            exportHTMLMenuItem.setVisible(false);
+
             setVisible(true);
         }
 
@@ -622,7 +625,8 @@ public class MainForm extends JFrame{
                 idsItems = null;
 
             connectionTable.UnConnectAllForItem(id, idsItems);
-            data.RemoveRow(indexRow, model);
+            data.RemoveRow(id);
+            model.removeRow(indexRow);
 
         } catch ( IndexOutOfBoundsException e)
         {
@@ -658,16 +662,25 @@ public class MainForm extends JFrame{
     {
         if (GetModeProgram() == ProgramMode.Characters)
         {
+            connectionTable.ClearConnectionTable();
+            characterData.ClearTable(charaterModel);
             viewCharacterData = characterData = new CharactersTable();
             viewCharacterData.InsertDataInTableModel(charaterModel);
         } else if (GetModeProgram() == ProgramMode.Tasks)
         {
+            connectionTable.ClearConnectionTable();
+            taskData.ClearTable(taskModel);
             viewTaskData = taskData = new TaskTable();
             viewTaskData.InsertDataInTableModel(taskModel);
         }else {
+            connectionTable.ClearConnectionTable();
+            characterData.ClearTable(charaterModel);
+            taskData.ClearTable(taskModel);
+
             viewCharacterData = characterData = new CharactersTable();
-            viewTaskData = taskData = new TaskTable();
             viewCharacterData.InsertDataInTableModel(charaterModel);
+
+            viewTaskData = taskData = new TaskTable();
             viewTaskData.InsertDataInTableModel(taskModel);
         }
     }
@@ -775,12 +788,16 @@ public class MainForm extends JFrame{
 
     public void ApplyDataCharacter(DataTable thisData)
     {
+        characterData.ClearTable(charaterModel);
+        thisData.SaveDB();
         viewCharacterData = characterData = (CharactersTable)thisData;
         viewCharacterData.InsertDataInTableModel(charaterModel);
     }
 
     public void ApplyDataTask(DataTable thisData)
     {
+        taskData.ClearTable(taskModel);
+        thisData.SaveDB();
         viewTaskData = taskData = (TaskTable)thisData;
         viewTaskData.InsertDataInTableModel(taskModel);
     }
